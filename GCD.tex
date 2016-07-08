@@ -1,0 +1,47 @@
+\documentclass[a4j]{ltjsarticle}
+\usepackage{ifthen}
+\makeatletter
+
+\newcount\result@factorial
+\newcount\count@factorial
+
+\newcount\m@mod
+\newcount\n@mod
+\newcount\result@mod
+
+\newcount\m@GCD
+\newcount\n@GCD
+
+\result@factorial=1
+\count@factorial=-1
+
+\m@GCD=-1
+\n@GCD=-1
+
+\newcommand{\mod}[2]{%
+  \m@mod=#1\relax
+  \n@mod=#2\relax
+  \result@mod=\m@mod\relax
+  \divide \m@mod by \n@mod\relax
+  \multiply \n@mod by \m@mod\relax
+  \multiply \n@mod by -1\relax
+  \advance \result@mod by \n@mod\relax
+}
+
+\newcommand{\factorial}[1]{{%
+  \ifthenelse{\count@factorial=-1}{\count@factorial=#1}{}
+  \multiply \result@factorial by \count@factorial
+  \advance \count@factorial by -1
+  \ifthenelse{\NOT{\count@factorial=0}}{\factorial{\count@factorial}}{\the\result@factorial}
+}}
+
+\newcommand{\GCD}[2]{%
+  \m@GCD=#1\relax
+  \n@GCD=#2\relax
+  \mod{\m@GCD}{\n@GCD}\relax
+  \ifthenelse{\result@mod=0}{\the\n@GCD}{\GCD{\n@GCD}{\result@mod}}\relax
+}
+\makeatother
+\begin{document}
+  \GCD{4515}{78455}
+\end{document}
