@@ -3,6 +3,49 @@
 \documentclass[a4j,titlepage,dvipdfmx]{jsarticle}   % タイトルだけのページを作る
 \usepackage{amsmath} % align環境を使う為のパッケージ
 \usepackage{graphicx} % includegraphicsコマンドｗお使うためのパッケージ
+\usepackage{here} % Hオプションを使うため
+\usepackage[cache=false]{minted} % mintedを使うため
+\usepackage{listings} % listingを使うため
+\usepackage{jlisting} % listingを日本語に対応させるため
+\usepackage{color} % listingでシンタックスハイライトするため
+\usepackage{itembkbx} % breakitemboxを使うため
+\usepackage{verbatim} % verbatiminputを使うため
+
+
+\newminted[myMinted]{c}{%
+  linenos,
+  mathescape,
+  numbersep=5pt,
+  frame=lines,
+  framesep=2mm
+} % あらかじめmintedの設定を記述しておく
+\newmintedfile[myMintedfile]{c}{
+    linenos,
+    mathescape,
+    numbersep=5pt,
+    frame=lines,
+    framesep=2mm
+}
+
+\lstset{%
+  language={C},
+  basicstyle={\small},%
+  identifierstyle={\small},%
+  commentstyle={\small\itshape\color[rgb]{0,0.5,0}},%
+  keywordstyle={\small\bfseries\color[rgb]{0,0,1}},%
+  ndkeywordstyle={\small},%
+  stringstyle={\small\ttfamily\color[rgb]{1,0,1}},
+  frame={tb},
+  breaklines=true,
+  columns=[l]{fullflexible},%
+  numbers=left,%
+  xrightmargin=0zw,%
+  xleftmargin=3zw,%
+  numberstyle={\scriptsize},%
+  stepnumber=1,
+  numbersep=1zw,%
+  lineskip=-0.5ex%
+} % あらかじめlistingの設定を書いておく
 
 \title{レポートのタイトル}
 \author{レポートの作者 \and
@@ -12,6 +55,7 @@
 %\date{\today} 今日の日付が入る
 
 \begin{document}
+
   \maketitle % タイトル，著者，日付が出力される
   \tableofcontents % 目次が出力される
   \clearpage % 目次を独立したページに出力する
@@ -20,10 +64,12 @@
   \subsection{小節}
   \subsubsection{小々節}
   このように節は大きいものから小さいものまである．
+
   \section*{大節(節番号なし)}
   \subsection*{小節(節番号なし)}
   \subsubsection*{小々節(節番号なし)}
   コマンドの後に*を付けると節番号が出力されない．
+
   \section{箇条書き}
   \subsection{itemize}
   箇条書きの代表的な環境はitemize環境である．
@@ -37,6 +83,7 @@
       \item この通り
     \end{itemize}
   \end{itemize}
+
   \subsection{enumerate}
   番号をつけるにはenumerate環境を使う．
   \begin{enumerate}
@@ -44,6 +91,7 @@
       \item 付いている
       \item はず
   \end{enumerate}
+
   \subsection{description}
   自由に項目を付けるにはdescription環境を使う．
   \begin{description}
@@ -51,18 +99,22 @@
       \item[△] 項目に
       \item[◇] なっているはず
   \end{description}
+
   \section{数式を使う}
   \subsection{インライン数式モード}
   文章中に数式を埋め込む場合はインライン数式モードを使う．この式$f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}$は
   フーリエ逆変換の離散スペクトルの場合であり，
   次の式$f(t) = \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega$は
   連続スペクトルの場合である．
+
   \subsection{ディスプレイ数式モード}
   数式だけの行を作りたいのであればディスプレイ数式モードを使う．
+
   \subsubsection{数式が1行の場合}
   \begin{equation}
     f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}
   \end{equation}
+
   \subsubsection{数式が複数行の場合}
   \begin{align*} % *をなくすと数式番号が末尾につく
     \intertext{離散スペクトルの場合は}
@@ -71,8 +123,95 @@
     f(t) &= \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega \\
     \intertext{のように表される．}
   \end{align*}
+
   \section{図表の挿入}
   \subsection{図}
   図はjpg,png,bmp,gif,eps,pdfなどが入る．レポートの図であればpdfをおすすめする．
-  \includegraphics[width=5cm,height=5cm]{test.pdf}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{test.pdf}
+    \caption{$\frac{\sin{x}}{\frac{\cos{x}}{\tan{x}}}$}
+    \label{fig:tri}
+  \end{figure}
+  図\ref{fig:tri}は参照されている図である．
+
+  \subsection{表}
+  \begin{table}[H]
+    \centering
+    \caption{謎の表}
+    \label{tab:testTab}
+    \begin{tabular}{|l|l|r|}
+      \hline
+      Animal      & Description  & Price (\$) \\ \hline
+      Gnat        & per gram     & 13.65      \\ \hline
+                  & each         & 0.01       \\ \hline
+      Gnu         & stuffed      & 92.50      \\ \hline
+      Emu         & stuffed      & 33.33      \\ \hline
+      Armadillo   & frozen       & 8.99       \\ \hline
+    \end{tabular}
+  \end{table}
+  表\ref{tab:testTab}である．このように参照できる．
+
+  \subsection{複数の表や図を並べて表示する}
+  \begin{figure}[H]
+    \begin{tabular}{cc}
+      \begin{minipage}{0.5\hsize}
+        \centering
+        \includegraphics[width=\textwidth]{sinFig.pdf}
+        \caption{$\sin{x}$}
+        \label{fig:sin}
+      \end{minipage}
+      \begin{minipage}{0.5\hsize}
+        \centering
+        \includegraphics[width=\textwidth]{cosFig.pdf}
+        \caption{$\cos{x}$}
+        \label{fig:cos}
+      \end{minipage}
+    \end{tabular}
+  \end{figure}
+
+  \section{ソースコードを載せる}
+  \subsection{minted}
+  \begin{myMinted}
+    #include<stdio.h>
+
+    int main(void){
+      printf("Hello World!!\");
+      return 0;
+    }
+  \end{myMinted}
+
+  \subsection{listing}
+  \begin{lstlisting}[caption=listingのテスト,label=listTest]
+    #include<stdio.h>
+
+    int main(void){
+      printf("Hello World!!\");
+      return 0;
+    }
+  \end{lstlisting}
+
+  \subsection{breakitembox+verbatim}
+  \begin{breakitembox}[l]{見出し}
+    \begin{verbatim}
+        #include<stdio.h>
+        int main(void){
+            printf(Hello World!\n);
+            return 0;
+        }
+    \end{verbatim}
+\end{breakitembox}
+
+\section{ソースコードをファイルから載せる}
+\subsection{minted}
+\myMintedfile{test.c}
+
+\subsection{listing}
+\lstinputlisting[caption=aaa,label=aaa]{test.c}
+
+\subsection{breakitembox+verbatiminput}
+\begin{breakitembox}[l]{見出し}
+   \verbatiminput{test.c}
+\end{breakitembox}
+
 \end{document}

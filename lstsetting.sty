@@ -1,0 +1,164 @@
+\usepackage{listings,jlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% listingの装飾設定
+%%%%%%%% C++ %%%%%%%%
+\lstdefinestyle{customc}{
+	language=C++,%言語仕様の決定
+	backgroundcolor={\color[gray]{.95}},%ソースを載せる背景色の決定
+	basicstyle={\ttfamily\small},%ソースのフォントなどの決定
+	identifierstyle={\small},%ソースコードすべてに関わる設定
+	commentstyle={\small\ttfamily \color[rgb]{0,0.5,0}},%
+	%ソースのコメント部分のフォント、色の決定
+	keywordstyle={\small\bfseries \color[rgb]{0,0,1}},%
+	%ソースの制御文のフォント、色の決定
+	keywordstyle={[2]\color[rgb]{1,0,0}},%
+	%ソースの型指定子のフォント、色の決定
+	%keywordstyle={[3]\color[rgb]{1,0.5,0}},%
+	%ソースのその他のフォント、色の決定%
+	stringstyle={\small\ttfamily \color[rgb]{1,0,1}},%
+	%ソースの""や''で囲まれた文字列のフォント、色の決定
+	frame={tb},%ソースを囲む縁の決定
+	breaklines=true,%折り返しの有無
+	columns=[l]{fullflexible},%文字と文字の間隔
+	numbers=left,%行番号の位置
+	xrightmargin=0zw,%文書右側の許容範囲
+	xleftmargin=0zw,%文書左側の許容範囲
+	numberstyle={\scriptsize},%行番号のフォント、色の決定
+	stepnumber=1,%ソースコード一行につき行番号幾つカウントするか
+	numbersep=1zw,%ソースコードと行番号の距離
+	captionpos={b},
+	showstringspaces=false,
+}
+%%%%%%%%LaTeX%%%%%%%%
+\lstdefinestyle{customtex}{
+	language=TeX,%言語仕様の決定
+	backgroundcolor={\color[gray]{.95}},%ソースを載せる背景色の決定
+	basicstyle={\ttfamily\small},%ソースのフォントなどの決定
+	identifierstyle={\small},%ソースコードすべてに関わる設定
+	commentstyle={\small\ttfamily \color[rgb]{0,0.5,0}},%
+	%ソースのコメント部分のフォント、色の決定
+	texcsstyle={\small\bfseries \color[rgb]{0,0,1}},%
+	%ソースの制御文のフォント、色の決定
+	keywordstyle={[2]\color[rgb]{1,0,0}},%
+	%ソースの型指定子のフォント、色の決定
+	stringstyle={\small\ttfamily \color[rgb]{1,0,1}},%
+	%ソースの""や''で囲まれた文字列のフォント、色の決定
+	frame={tb},%ソースを囲む縁の決定
+	breaklines=true,%折り返しの有無
+	columns=[l]{fullflexible},%文字と文字の間隔
+	numbers=left,%行番号の位置
+	xrightmargin=0zw,%文書右側の許容範囲
+	xleftmargin=0zw,%文書左側の許容範囲
+	numberstyle={\scriptsize},%行番号のフォント、色の決定
+	stepnumber=1,%ソースコード一行につき行番号幾つカウントするか
+	numbersep=1zw,%ソースコードと行番号の距離
+	captionpos={b},
+	identifierstyle=\color{black}\bfseries,
+	moredelim=[s][\color{ForestGreen}]{\{}{\}},
+	moredelim=[s][\color{blue}]{[}{]},
+	morekeywords={},
+	otherkeywords={$,\& },
+	columns=fullflexible,
+	breaklines=true,
+	texcsstyle=*\color{maincs},
+	texcs={documentclass,begin,end,chapter,section,subsection,label,alpha},
+}
+%%%%%%%Java%%%%%%
+\lstdefinestyle{customJava}{
+	language=Java,%言語仕様の決定
+	backgroundcolor={\color[gray]{.95}},%ソースを載せる背景色の決定
+	basicstyle={\ttfamily\small},%ソースのフォントなどの決定
+	identifierstyle={\small},%ソースコードすべてに関わる設定
+	commentstyle={\small\ttfamily \color[rgb]{0,0.5,0}},%
+	%ソースのコメント部分のフォント、色の決定
+	keywordstyle={\small\bfseries \color[rgb]{0,0,1}},%
+	%ソースの制御文のフォント、色の決定
+	keywordstyle={[2]\color[rgb]{1,0,0}},%
+	%ソースの型指定子のフォント、色の決定
+	%keywordstyle={[3]\color[rgb]{1,0.5,0}},%
+	%ソースのその他のフォント、色の決定%
+	stringstyle={\small\ttfamily \color[rgb]{1,0,1}},%
+	%ソースの""や''で囲まれた文字列のフォント、色の決定
+	frame={tb},%ソースを囲む縁の決定
+	breaklines=true,%折り返しの有無
+	columns=[l]{fullflexible},%文字と文字の間隔
+	numbers=left,%行番号の位置
+	xrightmargin=0zw,%文書右側の許容範囲
+	xleftmargin=0zw,%文書左側の許容範囲
+	numberstyle={\scriptsize},%行番号のフォント、色の決定
+	stepnumber=1,%ソースコード一行につき行番号幾つカウントするか
+	numbersep=1zw,%ソースコードと行番号の距離
+	captionpos={b},
+	showstringspaces=false,
+}
+%%%%%%その他の言語%%%%%%
+\lstdefinestyle{other}{
+	backgroundcolor={\color[gray]{.95}},%ソースを載せる背景色の決定
+	basicstyle={\ttfamily\small},%ソースのフォントなどの決定
+	identifierstyle={\small},%ソースコードすべてに関わる設定
+	frame={tb},%ソースを囲む縁の決定
+	breaklines=true,%折り返しの有無
+	columns=[l]{fullflexible},%文字と文字の間隔
+	numbers=left,%行番号の位置
+	xrightmargin=0zw,%文書右側の許容範囲
+	xleftmargin=0zw,%文書左側の許容範囲
+	numberstyle={\scriptsize},%行番号のフォント、色の決定
+	stepnumber=1,%ソースコード一行につき行番号幾つカウントするか
+	numbersep=1zw,%ソースコードと行番号の距離
+	captionpos={b},
+	showstringspaces=false,
+}
+%%%%%%%%%%beamer用設定%%%%%%%%%%%
+\lstdefinestyle{Bcustomtex}{
+	language=[LaTeX]TeX,%言語仕様の決定
+	backgroundcolor={\color[gray]{.95}},%ソースを載せる背景色の決定
+	basicstyle={\ttfamily\tiny},%ソースのフォントなどの決定
+	identifierstyle={\tiny},%ソースコードすべてに関わる設定
+	commentstyle={\tiny\ttfamily \color[rgb]{0,0.5,0}},%
+	%ソースのコメント部分のフォント、色の決定
+	keywordstyle={\tiny\bfseries \color[rgb]{0,0,1}},%
+	%ソースの制御文のフォント、色の決定
+	keywordstyle={[2]\color[rgb]{1,0,0}},%
+	%ソースの型指定子のフォント、色の決定
+	stringstyle={\tiny\ttfamily \color[rgb]{1,0,1}},%
+	%ソースの""や''で囲まれた文字列のフォント、色の決定
+	frame={tb},%ソースを囲む縁の決定
+	breaklines=true,%折り返しの有無
+	columns=[l]{fullflexible},%文字と文字の間隔
+	numbers=left,%行番号の位置
+	xrightmargin=0zw,%文書右側の許容範囲
+	xleftmargin=0zw,%文書左側の許容範囲
+	numberstyle={\tiny},%行番号のフォント、色の決定
+	stepnumber=1,%ソースコード一行につき行番号幾つカウントするか
+	numbersep=1zw,%ソースコードと行番号の距離
+	captionpos={b},%キャプションのつける位置
+	lineskip = {5mm},%行間の設定
+	identifierstyle=\color{black}\bfseries,
+	moredelim=[s][\color{ForestGreen}]{\{}{\}},
+	moredelim=[s][\color{blue}]{[}{]},
+	morekeywords={},
+	otherkeywords={$,\& },
+	columns=fullflexible,
+	breaklines=true,
+	texcsstyle=*\color{maincs},
+	texcs={documentclass,begin,end,chapter,section,subsection,label,alpha},
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\lstdefinestyle{Bother}{
+	backgroundcolor={\color[gray]{.95}},%ソースを載せる背景色の決定
+	basicstyle={\ttfamily\tiny},%ソースのフォントなどの決定
+	identifierstyle={\tiny},%ソースコードすべてに関わる設定
+	frame={tb},%ソースを囲む縁の決定
+	breaklines=true,%折り返しの有無
+	columns=[l]{fullflexible},%文字と文字の間隔
+	numbers=left,%行番号の位置
+	xrightmargin=0zw,%文書右側の許容範囲
+	xleftmargin=0zw,%文書左側の許容範囲
+	numberstyle={\tiny},%行番号のフォント、色の決定
+	stepnumber=1,%ソースコード一行につき行番号幾つカウントするか
+	numbersep=1zw,%ソースコードと行番号の距離
+	captionpos={b},
+	lineskip={3mm},
+	showstringspaces=false,
+}
