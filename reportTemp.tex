@@ -1,0 +1,78 @@
+%\documentclass[a4j,twocolumn, dvipdfmx]{jsarticle} % 二段組の構成にする
+%\documentclass[a4j,notitlepage, dvipdfmx]{jsarticle} % タイトルだけのページを作らない
+\documentclass[a4j,titlepage,dvipdfmx]{jsarticle}   % タイトルだけのページを作る
+\usepackage{amsmath} % align環境を使う為のパッケージ
+\usepackage{graphicx} % includegraphicsコマンドｗお使うためのパッケージ
+
+\title{レポートのタイトル}
+\author{レポートの作者 \and
+        レポートの作者その2 \and
+        レポートの作者その3}
+\date{XXXX年XX月XX日}
+%\date{\today} 今日の日付が入る
+
+\begin{document}
+  \maketitle % タイトル，著者，日付が出力される
+  \tableofcontents % 目次が出力される
+  \clearpage % 目次を独立したページに出力する
+
+  \section{大節}
+  \subsection{小節}
+  \subsubsection{小々節}
+  このように節は大きいものから小さいものまである．
+  \section*{大節(節番号なし)}
+  \subsection*{小節(節番号なし)}
+  \subsubsection*{小々節(節番号なし)}
+  コマンドの後に*を付けると節番号が出力されない．
+  \section{箇条書き}
+  \subsection{itemize}
+  箇条書きの代表的な環境はitemize環境である．
+  \begin{itemize}
+    \item hoge
+    \item fuga
+    \item foo
+    \begin{itemize}
+      \item 入れ子
+      \item 構造も
+      \item この通り
+    \end{itemize}
+  \end{itemize}
+  \subsection{enumerate}
+  番号をつけるにはenumerate環境を使う．
+  \begin{enumerate}
+      \item 番号が
+      \item 付いている
+      \item はず
+  \end{enumerate}
+  \subsection{description}
+  自由に項目を付けるにはdescription環境を使う．
+  \begin{description}
+      \item[□] 様々な
+      \item[△] 項目に
+      \item[◇] なっているはず
+  \end{description}
+  \section{数式を使う}
+  \subsection{インライン数式モード}
+  文章中に数式を埋め込む場合はインライン数式モードを使う．この式$f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}$は
+  フーリエ逆変換の離散スペクトルの場合であり，
+  次の式$f(t) = \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega$は
+  連続スペクトルの場合である．
+  \subsection{ディスプレイ数式モード}
+  数式だけの行を作りたいのであればディスプレイ数式モードを使う．
+  \subsubsection{数式が1行の場合}
+  \begin{equation}
+    f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}
+  \end{equation}
+  \subsubsection{数式が複数行の場合}
+  \begin{align*} % *をなくすと数式番号が末尾につく
+    \intertext{離散スペクトルの場合は}
+    f(t) &= \sum_{n=-\infty}^{\infty} F_n e^{int} \\
+    \intertext{と表され，連続スペクトルの場合は}
+    f(t) &= \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega \\
+    \intertext{のように表される．}
+  \end{align*}
+  \section{図表の挿入}
+  \subsection{図}
+  図はjpg,png,bmp,gif,eps,pdfなどが入る．レポートの図であればpdfをおすすめする．
+  \includegraphics[width=5cm,height=5cm]{test.pdf}
+\end{document}
