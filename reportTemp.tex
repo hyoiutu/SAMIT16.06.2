@@ -10,7 +10,8 @@
 \usepackage{color} % listingでシンタックスハイライトするため
 \usepackage{itembkbx} % breakitemboxを使うため
 \usepackage{verbatim} % verbatiminputを使うため
-
+\usepackage{tikz} % texに直接図を埋め込むため
+\usepackage{gnuplot-lua-tikz} % texに直接図を埋め込むため
 
 \newminted[myMinted]{c}{%
   linenos,
@@ -25,7 +26,14 @@
     numbersep=5pt,
     frame=lines,
     framesep=2mm
-}
+} % あらかじめmintedの設定を記述しておく
+\newminted{shell}{%
+  linenos,
+  mathescape,
+  numbersep=5pt,
+  frame=lines,
+  framesep=2mm
+} % あらかじめmintedの設定を記述しておく
 
 \lstset{%
   language={C},
@@ -126,10 +134,12 @@
 
   \section{図表の挿入}
   \subsection{図}
-  図はjpg,png,bmp,gif,eps,pdfなどが入る．レポートの図であればpdfをおすすめする．
+  図はjpg,png,bmp,gif,eps,pdfなどが入る．レポートの図であればベクタ画像%
+  \footnote{いくら拡大しても荒くならない．色のドット情報で表されるのがラスタ画像(jpg,png,bmp,gifなど)で，
+  線の情報で表されるのがベクタ画像(eps,pdf,svgなど)}でありながら軽いpdfをおすすめする．
   \begin{figure}[H]
     \centering
-    \includegraphics[width=\textwidth]{test.pdf}
+    \includegraphics[width=\columnwidth]{test.pdf}
     \caption{$\frac{\sin{x}}{\frac{\cos{x}}{\tan{x}}}$}
     \label{fig:tri}
   \end{figure}
@@ -157,13 +167,13 @@
     \begin{tabular}{cc}
       \begin{minipage}{0.5\hsize}
         \centering
-        \includegraphics[width=\textwidth]{sinFig.pdf}
+        \includegraphics[width=\columnwidth]{sinFig.pdf}
         \caption{$\sin{x}$}
         \label{fig:sin}
       \end{minipage}
       \begin{minipage}{0.5\hsize}
         \centering
-        \includegraphics[width=\textwidth]{cosFig.pdf}
+        \includegraphics[width=\columnwidth]{cosFig.pdf}
         \caption{$\cos{x}$}
         \label{fig:cos}
       \end{minipage}
@@ -171,6 +181,12 @@
   \end{figure}
 
   \section{ソースコードを載せる}
+  \begin{listing}[htbp]
+    \caption{初回に必要なコマンド}
+    \begin{shellcode}
+      sudo apt install python-pygments
+    \end{shellcode}
+  \end{listing}
   \subsection{minted}
   \begin{myMinted}
     #include<stdio.h>
@@ -213,5 +229,22 @@
 \begin{breakitembox}[l]{見出し}
    \verbatiminput{test.c}
 \end{breakitembox}
+
+\section{texにgnuplotの図を直接記述する}
+\begin{shellcode}
+  set title 'test graph'
+  set xlabel 'x'
+  set ylabel 'f(x)'
+  set xrange [-5:5]
+  set yrange [-0.1:1.1]
+  plot 1/(1+exp(-x))
+  set terminal tikz
+  set output 'tikztest.tex'
+  replot
+  quit
+\end{shellcode}
+\centering
+\resizebox{\columnwidth}{!}{\input{tikztest}}
+
 
 \end{document}

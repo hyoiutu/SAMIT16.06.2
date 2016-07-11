@@ -24,13 +24,13 @@
 \read-1 to \inputN
 
 \newcommand{\mod}[2]{%
-  \m@mod=#1\relax
-  \n@mod=#2\relax
-  \result@mod=\m@mod\relax
-  \divide \m@mod by \n@mod\relax
-  \multiply \n@mod by \m@mod\relax
-  \multiply \n@mod by -1\relax
-  \advance \result@mod by \n@mod\relax
+  \m@mod=#1%
+  \n@mod=#2%
+  \result@mod=\m@mod%
+  \divide \m@mod by \n@mod%
+  \multiply \n@mod by \m@mod%
+  \multiply \n@mod by -1%
+  \advance \result@mod by \n@mod%
 }
 
 %\newcommand{\factorial}[1]{{%
@@ -41,13 +41,13 @@
 %}}
 
 \newcommand{\GCD}[2]{%
-  \m@GCD=#1\relax
-  \n@GCD=#2\relax
-  \mod{\m@GCD}{\n@GCD}\relax
-  \ifthenelse{\result@mod=0}{\the\n@GCD}{\GCD{\n@GCD}{\result@mod}}\relax
+  \m@GCD=#1%
+  \n@GCD=#2%
+  \mod{\m@GCD}{\n@GCD}%
+  \ifthenelse{\result@mod=0}{\the\n@GCD}{\GCD{\n@GCD}{\result@mod}}%
 }
 \makeatother
 
 \begin{document}
-  GCD(\inputM ,\inputN)=\GCD{\inputM}{\inputN}
+  \LaTeX GCD(\inputM ,\inputN)=\GCD{\inputM}{\inputN}
 \end{document}
