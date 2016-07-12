@@ -1,6 +1,6 @@
 %\documentclass[a4j,twocolumn, dvipdfmx]{jsarticle} % 二段組の構成にする
 %\documentclass[a4j,notitlepage, dvipdfmx]{jsarticle} % タイトルだけのページを作らない
-\documentclass[a4j,titlepage,dvipdfmx]{jsarticle}   % タイトルだけのページを作る
+\documentclass[a4j,titlepage]{ltjsarticle}   % タイトルだけのページを作る
 \usepackage{amsmath} % align環境を使う為のパッケージ
 \usepackage{graphicx} % includegraphicsコマンドｗお使うためのパッケージ
 \usepackage{here} % Hオプションを使うため
@@ -47,12 +47,13 @@
   breaklines=true,
   columns=[l]{fullflexible},%
   numbers=left,%
-  xrightmargin=0zw,%
-  xleftmargin=3zw,%
+  xrightmargin=0\zw,%
+  xleftmargin=3\zw,%
   numberstyle={\scriptsize},%
   stepnumber=1,
-  numbersep=1zw,%
-  lineskip=-0.5ex%
+  numbersep=1\zw,%
+  lineskip=-0.5ex,%
+  frame=single%
 } % あらかじめlistingの設定を書いておく
 
 \title{レポートのタイトル}
@@ -202,21 +203,23 @@
     #include<stdio.h>
 
     int main(void){
-      printf("Hello World!!\");
+      printf("Hello World!!\n");
       return 0;
     }
   \end{lstlisting}
 
   \subsection{breakitembox+verbatim}
-  \begin{breakitembox}[l]{見出し}
-    \begin{verbatim}
-        #include<stdio.h>
-        int main(void){
-            printf(Hello World!\n);
-            return 0;
-        }
-    \end{verbatim}
-\end{breakitembox}
+
+  %\begin{breakitembox}[l]{見出し}
+  %  \begin{verbatim}
+  %      #include<stdio.h>
+  %      int main(void){
+  %          printf(Hello World!\n);
+  %          return 0;
+  %      }
+  %  \end{verbatim}
+  %\end{breakitembox}
+
 
 \section{ソースコードをファイルから載せる}
 \subsection{minted}
@@ -226,9 +229,9 @@
 \lstinputlisting[caption=aaa,label=aaa]{test.c}
 
 \subsection{breakitembox+verbatiminput}
-\begin{breakitembox}[l]{見出し}
-   \verbatiminput{test.c}
-\end{breakitembox}
+%\begin{breakitembox}[l]{見出し}
+%   \verbatiminput{test.c}
+%\end{breakitembox}
 
 \section{texにgnuplotの図を直接記述する}
 \begin{shellcode}
@@ -244,7 +247,6 @@
   quit
 \end{shellcode}
 \centering
-\resizebox{\columnwidth}{!}{\input{tikztest}}
-
-
+%\resizebox{\columnwidth}{!}{\input{tikztest}}
+\input{tikztest}
 \end{document}
