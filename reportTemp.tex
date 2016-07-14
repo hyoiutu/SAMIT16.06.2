@@ -1,8 +1,11 @@
+%------------------------------------- ページサイズなどの書式設定
 %\documentclass[a4j,twocolumn, dvipdfmx]{jsarticle} % 二段組の構成にする
 %\documentclass[a4j,notitlepage, dvipdfmx]{jsarticle} % タイトルだけのページを作らない
-\documentclass[a4j,titlepage]{ltjsarticle}   % タイトルだけのページを作る
+\documentclass[a4j,titlepage,dvipdfmx]{jsarticle}   % タイトルだけのページを作る
+%------------------------------------- パッケージ読み込み
+\usepackage[ipaex]{pxchfon}
 \usepackage{amsmath} % align環境を使う為のパッケージ
-\usepackage{graphicx} % includegraphicsコマンドｗお使うためのパッケージ
+\usepackage{graphicx} % includegraphicsコマンドを使うためのパッケージ
 \usepackage{here} % Hオプションを使うため
 \usepackage[cache=false]{minted} % mintedを使うため
 \usepackage{listings} % listingを使うため
@@ -12,7 +15,7 @@
 \usepackage{verbatim} % verbatiminputを使うため
 \usepackage{tikz} % texに直接図を埋め込むため
 \usepackage{gnuplot-lua-tikz} % texに直接図を埋め込むため
-
+%------------------------------------- mintedの設定
 \newminted[myMinted]{c}{%
   linenos,
   mathescape,
@@ -34,7 +37,7 @@
   frame=lines,
   framesep=2mm
 } % あらかじめmintedの設定を記述しておく
-
+%------------------------------------- listingの設定
 \lstset{%
   language={C},
   basicstyle={\small},%
@@ -47,15 +50,14 @@
   breaklines=true,
   columns=[l]{fullflexible},%
   numbers=left,%
-  xrightmargin=0\zw,%
-  xleftmargin=3\zw,%
+  xrightmargin=0zw,%
+  xleftmargin=3zw,%
   numberstyle={\scriptsize},%
   stepnumber=1,
-  numbersep=1\zw,%
-  lineskip=-0.5ex,%
-  frame=single%
+  numbersep=1zw,%
+  lineskip=-0.5ex%
 } % あらかじめlistingの設定を書いておく
-
+%------------------------------------- タイトルの設定
 \title{レポートのタイトル}
 \author{レポートの作者 \and
         レポートの作者その2 \and
@@ -64,11 +66,11 @@
 %\date{\today} 今日の日付が入る
 
 \begin{document}
-
+%------------------------------------- タイトル，目次の出力
   \maketitle % タイトル，著者，日付が出力される
   \tableofcontents % 目次が出力される
   \clearpage % 目次を独立したページに出力する
-
+%------------------------------------- 節の付け方
   \section{大節}
   \subsection{小節}
   \subsubsection{小々節}
@@ -78,7 +80,7 @@
   \subsection*{小節(節番号なし)}
   \subsubsection*{小々節(節番号なし)}
   コマンドの後に*を付けると節番号が出力されない．
-
+%------------------------------------- 箇条書き
   \section{箇条書き}
   \subsection{itemize}
   箇条書きの代表的な環境はitemize環境である．
@@ -108,7 +110,7 @@
       \item[△] 項目に
       \item[◇] なっているはず
   \end{description}
-
+%------------------------------------- 数式
   \section{数式を使う}
   \subsection{インライン数式モード}
   文章中に数式を埋め込む場合はインライン数式モードを使う．この式$f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}$は
@@ -120,9 +122,14 @@
   数式だけの行を作りたいのであればディスプレイ数式モードを使う．
 
   \subsubsection{数式が1行の場合}
-  \begin{equation}
+  数式番号をつける場合はequation環境を使う
+  \begin{equation} % 数式番号がつく
     f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}
   \end{equation}
+  数式番号がつかない場合は\verb|$$|で挟む
+  $$ % 数式番号がつかない
+  	f(t) = \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega
+  $$
 
   \subsubsection{数式が複数行の場合}
   \begin{align*} % *をなくすと数式番号が末尾につく
@@ -132,7 +139,7 @@
     f(t) &= \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega \\
     \intertext{のように表される．}
   \end{align*}
-
+%------------------------------------- 図の挿入
   \section{図表の挿入}
   \subsection{図}
   図はjpg,png,bmp,gif,eps,pdfなどが入る．レポートの図であればベクタ画像%
@@ -145,8 +152,7 @@
     \label{fig:tri}
   \end{figure}
   図\ref{fig:tri}は参照されている図である．
-
-  \subsection{表}
+  %------------------------------------- 表の挿入
   \begin{table}[H]
     \centering
     \caption{謎の表}
@@ -180,7 +186,7 @@
       \end{minipage}
     \end{tabular}
   \end{figure}
-
+%------------------------------------- ソースコードの挿入
   \section{ソースコードを載せる}
   \begin{listing}[htbp]
     \caption{初回に必要なコマンド}
@@ -203,23 +209,21 @@
     #include<stdio.h>
 
     int main(void){
-      printf("Hello World!!\n");
+      printf("Hello World!!\");
       return 0;
     }
   \end{lstlisting}
 
   \subsection{breakitembox+verbatim}
-
-  %\begin{breakitembox}[l]{見出し}
-  %  \begin{verbatim}
-  %      #include<stdio.h>
-  %      int main(void){
-  %          printf(Hello World!\n);
-  %          return 0;
-  %      }
-  %  \end{verbatim}
-  %\end{breakitembox}
-
+  \begin{breakitembox}[l]{見出し}
+    \begin{verbatim}
+        #include<stdio.h>
+        int main(void){
+            printf(Hello World!\n);
+            return 0;
+        }
+    \end{verbatim}
+\end{breakitembox}
 
 \section{ソースコードをファイルから載せる}
 \subsection{minted}
@@ -229,10 +233,10 @@
 \lstinputlisting[caption=aaa,label=aaa]{test.c}
 
 \subsection{breakitembox+verbatiminput}
-%\begin{breakitembox}[l]{見出し}
-%   \verbatiminput{test.c}
-%\end{breakitembox}
-
+\begin{breakitembox}[l]{見出し}
+   \verbatiminput{test.c}
+\end{breakitembox}
+%------------------------------------- gnuplotの図を直接記述
 \section{texにgnuplotの図を直接記述する}
 \begin{shellcode}
   set title 'test graph'
@@ -247,6 +251,5 @@
   quit
 \end{shellcode}
 \centering
-%\resizebox{\columnwidth}{!}{\input{tikztest}}
-\input{tikztest}
+\resizebox{\columnwidth}{!}{\input{tikztest}}
 \end{document}
