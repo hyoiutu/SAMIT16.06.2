@@ -6,6 +6,8 @@
 \usepackage[ipaex]{pxchfon}
 \usepackage{amsmath} % align環境を使う為のパッケージ
 \usepackage{graphicx} % includegraphicsコマンドを使うためのパッケージ
+\usepackage{amsmath} % align環境を使う為のパッケージ
+\usepackage[dvipdfmx]{graphicx} % includegraphicsコマンドｗお使うためのパッケージ
 \usepackage{here} % Hオプションを使うため
 \usepackage[cache=false]{minted} % mintedを使うため
 \usepackage{listings} % listingを使うため
@@ -55,7 +57,8 @@
   numberstyle={\scriptsize},%
   stepnumber=1,
   numbersep=1zw,%
-  lineskip=-0.5ex%
+  lineskip=-0.5ex,%
+  frame=single%
 } % あらかじめlistingの設定を書いておく
 %------------------------------------- タイトルの設定
 \title{レポートのタイトル}
@@ -215,15 +218,16 @@
   \end{lstlisting}
 
   \subsection{breakitembox+verbatim}
+
   \begin{breakitembox}[l]{見出し}
     \begin{verbatim}
-        #include<stdio.h>
-        int main(void){
-            printf(Hello World!\n);
-            return 0;
-        }
+      #include<stdio.h>
+      int main(void){
+        printf(Hello World!\n);
+        return 0;
+      }
     \end{verbatim}
-\end{breakitembox}
+  \end{breakitembox}
 
 \section{ソースコードをファイルから載せる}
 \subsection{minted}
@@ -236,6 +240,7 @@
 \begin{breakitembox}[l]{見出し}
    \verbatiminput{test.c}
 \end{breakitembox}
+
 %------------------------------------- gnuplotの図を直接記述
 \section{texにgnuplotの図を直接記述する}
 \begin{shellcode}

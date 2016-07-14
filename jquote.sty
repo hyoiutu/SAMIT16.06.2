@@ -7,8 +7,8 @@
 %
 %%% インデント
 %%% jquote(#1)(#2)[#3]
-%%%     #1 : 左インデント（デフォルト値 2\zw）
-%%%     #2 : 右インデント（デフォルト値 0\zw）
+%%%     #1 : 左インデント（デフォルト値 2zw）
+%%%     #2 : 右インデント（デフォルト値 0zw）
 %%%     #3 : \topsep
 %
   \define@key{jquote}{tsep}{\edef\t@sep{#1}}%
@@ -19,7 +19,7 @@
   \def\t@sep{0pt}\def\b@sep{0pt}%
   \@ifnextchar<{\jquote@}{\@jquote}}
 \def\jquote@<#1>{\setkeys{jquote}{#1}\@jquote}
-\def\@jquote{\@ifnextchar({\@@jquote}{\@@jquote(2\zw)}}%
+\def\@jquote{\@ifnextchar({\@@jquote}{\@@jquote(2zw)}}%
 \def\@@jquote(#1){%
   \@ifnextchar({\@@@jquote(#1)}{\@@@jquote(#1)(\z@)}}%
 \def\@@@jquote(#1)(#2){%
@@ -38,9 +38,9 @@
   \def\t@sep{0pt}\def\b@sep{0pt}%
   \@ifnextchar<{\jquotation@}{\@jquotation}}
 \def\jquotation@<#1>{\setkeys{jquote}{#1}\@jquotation}
-\def\@jquotation{\@ifnextchar({\@@jquotation}{\@@jquotation(2\zw)}}%
+\def\@jquotation{\@ifnextchar({\@@jquotation}{\@@jquotation(2zw)}}%
 \def\@@jquotation(#1){\@ifnextchar({\@@@jquotation(#1)}{%
-\@@@jquotation(#1)(0\zw)}}%
+\@@@jquotation(#1)(0zw)}}%
 \def\@@@jquotation(#1)(#2){\@ifnextchar[{\@@@@jquotation(#1)(#2)}{%
     \@@@@jquotation(#1)(#2)[\z@ plus\p@]}}%
 \def\@@@@jquotation(#1)(#2)[#3]{%
