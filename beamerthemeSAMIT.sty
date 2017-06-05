@@ -1,0 +1,74 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemeSAMIT}
+\RequirePackage{color}
+\RequirePackage{textpos}
+
+\definecolor{BackGround}{HTML}{282C35}
+\definecolor{ImportantLetter}{HTML}{D8E212}
+\definecolor{StandardLetter}{HTML}{EEEEEE}
+\definecolor{VeryImportantLetter}{HTML}{E87F10}
+
+\setbeamercolor{title}{fg=StandardLetter}
+\setbeamercolor{author}{fg=StandardLetter}
+\setbeamercolor{institute}{fg=StandardLetter}
+\setbeamercolor{date}{fg=StandardLetter}
+\setbeamercolor{frametitle}{fg=StandardLetter}
+\setbeamercolor{section in toc}{fg=StandardLetter}
+\setbeamercolor{normal text}{fg=StandardLetter}
+\setbeamercolor{background canvas}{bg=BackGround}
+\setbeamercolor{block title}{fg = StandardLetter}
+\setbeamercolor{block title example}{fg = ImportantLetter}
+\setbeamercolor{block title alerted}{fg = VeryImportantLetter}
+\setbeamercolor{structure}{fg = ImportantLetter}
+\setbeamercolor{alerted text}{fg = VeryImportantLetter}
+
+% タイトルの影を消す
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
+% 箇条書きをシンプルにする
+\useinnertheme{circles}
+% ナビゲーションシンボルを消す
+\setbeamertemplate{navigation symbols}{}
+% フッターにスライド番号のみを表示
+%\setbeamertemplate{footline}[frame number]
+% block,example block, alert blockの枠を消す．
+\setbeamertemplate{blocks}[shadow=false]
+\addtobeamertemplate{block begin}{}{\vspace{-1mm}}
+\addtobeamertemplate{block example begin}{}{\vspace{-1mm}}
+\addtobeamertemplate{block alerted begin}{}{\vspace{-1mm}}
+\addtobeamertemplate{frametitle}{}{%
+\vspace{2mm}
+%\insertframenumber/\inserttotalframenumber
+\begin{textblock*}{50mm}(.85\textwidth,.84\textheight)
+\includegraphics[scale=0.3]{logo.pdf}
+\end{textblock*}}
+
+% フォントファミリー設定
+% 英文をサンセリフ体に
+\renewcommand{\familydefault}{\sfdefault}
+% 数式はサンセリフ体にしない
+\usefonttheme{professionalfonts}
+% 日本語をゴシック体に
+\renewcommand{\kanjifamilydefault}{\gtdefault}
+% フォントウェイト設定
+% タイトル部は太字
+\usefonttheme{structurebold}
+% alertは太字
+\setbeamerfont{alerted text}{series=\bfseries}
+% 目次は太字にしない
+\setbeamerfont{section in toc}{series=\mdseries}
+% フレームタイトルは太字
+\setbeamerfont{frametitle}{size=\huge,series=\bfseries}
+% タイトルは太字
+\setbeamerfont{title}{size=\Large}
+% フォントサイズ設定
+% 日付は小文字
+\setbeamerfont{date}{size=\small}
+% ネストされたitemize，enumerate環境で小文字にしない
+\setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+% 行間を広げる
+\renewcommand{\baselinestretch}{1.2}
+% 別行立て数式環境の行間も広げる
+\def\defaultabovedisplayskip{8pt}
+\def\defaultbelowdisplayskip{8pt}
+\setlength{\abovedisplayskip}{\defaultabovedisplayskip}
+\setlength{\belowdisplayskip}{\defaultbelowdisplayskip}

@@ -1,0 +1,77 @@
+\documentclass[dvipdfmx,uplatex]{jsarticle}
+\usepackage{amsmath,amssymb}
+\usepackage{ascmac}
+\usepackage{tcolorbox}
+
+\newcommand{\problembox}[3]{%
+\begin{tcolorbox}[title = #1]
+\begin{center}
+  \texttt{\detokenize{#2}} \\
+  \texttt{\detokenize{#3}}
+\end{center}
+\tcblower
+\begin{center}
+  #2 \\
+  #3
+\end{center}
+\end{tcolorbox}
+}
+\title{よく誤用する\LaTeX のコマンド}
+\begin{document}
+\section{はじめに}
+この文書はレポートを書く学生がよく間違う，また，古くて諸問題を抱えた%
+\footnote{この大学の講義やレポートのテンプレート，教科書，配布資料などに記載されている\LaTeX にも古い書き方がいっぱいある}%
+\LaTeX のコマンドや書き方などを掲載したものです．
+\section{数式関係}
+ディスプレイ数式モードとインライン数式モードでは大型演算子の上付き文字や下付き文字が異なります．
+よって，適切な数式モードを選択する必要があります．
+\problembox{大型演算子}{$\displaystyle\sum_{n=0}^\infty f(n) + f(n+1)$}{$\sum_{n=0}^\infty f(n) + f(n+1)$}
+
+三角関数や指数・対数関数の数式コマンドはきちんと用意されているので適切なコマンドを使いましょう．
+三角関数のsinは\LaTeX のコマンドでは\verb|\sin|ですが，\verb|sin|と
+そのまま書いてしまう人が多いようです．これでは変数$s$と変数$i$と変数$n$の積という意味になってしまい，
+「定義されていない」とレポートが再提出になってしまうので気をつけましょう．正常なsinコマンドを
+使うと，文字がセリフ体になり，\textbackslash を付けないとイタリック体になるので見分けは
+すぐつきます．
+\problembox{関数}{$\sin$}{$sin$}
+
+合同式といえばmodですが，このmodには\verb|\bmod|と\verb|\pmod|の2つがあります．
+\verb|\bmod|は$x^2 \bmod p = a$と，右辺に剰余が来る時に使う括弧がないmod演算子に対して使います．
+合同式に対しては使わないので注意してください．
+\verb|\pmod|は$x^2 \equiv a \pmod p$といった具合に合同式に用いることができるのでこちらを使いましょう．
+\problembox{合同式}{$x^2 \equiv a \bmod p$}{$x^2 \equiv a \pmod p$}
+
+集合表現の一つとして$\left\{x \mid P(x) = 0\right\}$という表現がありますが，
+この表現の中に出てくる|をそのままの記号で入力する人が多いですが，この記号に
+対しても\LaTeX はコマンドを用意してあるのでそちらを使ってください．\verb|\mid|という
+コマンドで|を入力することができます．直接記号を入力したときと違って左右に適切な余白を
+空けてくれます．
+\problembox{集合表現}{$\left\{x \mid P(x) = 0\right\}$}{$\left\{x | P(x) = 0\right\}$}
+
+\LaTeX は変数の表現として下付き文字や上付き文字を使うことができます．この上付き文字，下付き文字は
+1文字の時と2文字以上の時で書き方が異なります．1文字の時は\verb|x^n|とすれば，$x^n$と表示されますが，
+\verb|x^n+1|は$x^n+1$と表示されてしまいます．\verb|x^{n+1}|と書くことで$x^{n+1}$と
+表示されます．下付き文字も同様です．
+\problembox{上付き文字・下付き文字}%
+{$\displaystyle\lim_{x \rightarrow \infty} \frac{1}{x}$}%
+{$\displaystyle\lim_x \rightarrow \infty \frac{1}{x}$}
+
+\LaTeX では大型演算子を使う時は括弧の書き方が変わります．普
+通，数式で使う括弧は\verb|(),\{\},[]|などで表現することができますが，
+大型演算子を使うことは括弧のサイズを合わせるために括弧の前に\verb|\left,\right|をつける必要があります．
+\problembox{括弧}%
+{$\displaystyle a_n = \frac{1}{\sqrt{5}}\left\{\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right\}$}%
+{$\displaystyle a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n - (\frac{1-\sqrt{5}}{2})^n\}$}
+
+\begin{center}{
+  \begin{tabular}{cc}
+$\displaystyle a_n = \frac{1}{\sqrt{5}}\left\{\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right\}$ \\[10mm]
+$a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n - (\frac{1-\sqrt{5}}{2})^n\}$
+\end{tabular}
+}\end{center}
+
+\begin{center}{
+\LaTeX , \TeX LaTeX, TeX
+}\end{center}
+
+\end{document}
