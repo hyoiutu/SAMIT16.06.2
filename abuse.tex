@@ -2,31 +2,196 @@
 \usepackage{amsmath,amssymb}
 \usepackage{ascmac}
 \usepackage{tcolorbox}
+\usepackage{minted}
+\usepackage{caption}
+\usepackage{bm}
+\usepackage{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{% hyperrefオプションリスト
+ setpagesize=false,
+ bookmarksnumbered=true,%
+ bookmarksopen=true,%
+ colorlinks=true,%
+ linkcolor=blue,
+ citecolor=red,
+}
+
+\newminted[excode]{latex}{%
+    linenos,
+    frame=lines,
+    numbersep=5pt,
+    framesep=2mm
+}
 
 \newcommand{\problembox}[3]{%
-\begin{tcolorbox}[title = #1]
-\begin{center}
-  \texttt{\detokenize{#2}} \\
-  \texttt{\detokenize{#3}}
-\end{center}
-\tcblower
-\begin{center}
-  #2 \\
-  #3
-\end{center}
-\end{tcolorbox}
+  \begin{tcolorbox}[title = #1]
+    \begin{center}
+      \texttt{\detokenize{#2}} \\
+      \texttt{\detokenize{#3}}
+    \end{center}
+    \tcblower
+    \begin{center}
+      #2 \\
+      #3
+    \end{center}
+  \end{tcolorbox}
 }
+
 \title{よく誤用する\LaTeX のコマンド}
 \begin{document}
 \section{はじめに}
 この文書はレポートを書く学生がよく間違う，また，古くて諸問題を抱えた%
 \footnote{この大学の講義やレポートのテンプレート，教科書，配布資料などに記載されている\LaTeX にも古い書き方がいっぱいある}%
 \LaTeX のコマンドや書き方などを掲載したものです．
-\section{数式関係}
+\section{コマンドの誤用}
+\subsection{引用符の誤用}
+特定の単語を強調したいときや固有名詞を表す時などにダブルクォーテーションで文を囲むことがあります．
+しかし，左右のダブルクォーテーションが全く同じになっている人が多くいます
+{\footnote{プログラマはプログラム中の文字列を1種類のダブルクォーテーションで囲むのでこの間違いをよくする}．
+\problembox{ダブルクォーテーション}{\TeX\ is "Are"}{\TeX\ is ``Are''}
+
+\subsection{図番号，表番号の参照方法の誤り}
+レポートを書く際に表や図を載せることが多々あります．更に，掲載した図や表を文中で参照することもあります．
+この時，「図3より~」などという表現をすることが多いがこの例の3という数字を直接入力している人が多くいます．
+レポートを書いている途中では掲載する図や表が増減することがよくあります．
+その際に，文中の参照番号も変えていたら煩わしい上に直し忘れもあるので図や表にラベルを付けてラベル名で参照できるようします．
+\begin{tcolorbox}[title=参照番号]
+  \begin{excode}
+    表\ref{tab:ex}は\LaTeX と\TeXの読み方について示したものである．
+  \end{excode}
+  \begin{excode}
+    表1は\LaTeX と\TeXの読み方について示したものである．
+  \end{excode}
+  \tcblower
+    \captionof{table}{\LaTeX と \TeX}\label{tab:ex}
+    \begin{tabular}{c|c}
+      \TeX & \LaTeX \\ \hline
+      テフ & ラテフ
+    \end{tabular}
+  表\ref{tab:ex}は\LaTeX と\TeX の読み方について示したものである．
+\end{tcolorbox}
+
+\subsection{表，図のキャプション位置の間違い}
+表のキャプションや図のキャプションには位置についてルールがあります．
+「{\bfseries 表は上にキャプションを付け，図は下にキャプションを付ける}」というルールです．
+これを忘れている人が結構いるので気をつけましょう．
+\begin{tcolorbox}[title=キャプション]
+\begin{excode}
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{c|c}
+      \TeX & \LaTeX \\ \hline
+      テフ & ラテフ
+    \end{tabular}
+    \caption{\LaTeX , \TeX の読み方}
+  \end{table}
+\end{excode}
+\begin{excode}
+  \caption{\LaTeX , \TeX の読み方}
+  \begin{table}[h]
+    \centering
+    \begin{tabular}{c|c}
+      \TeX & \LaTeX \\ \hline
+      テフ & ラテフ
+    \end{tabular}
+  \end{table}
+\end{excode}
+\end{tcolorbox}
+\begin{table}[h]
+\centering
+  \begin{minipage}{0.45\columnwidth}
+    \centering
+    \begin{tabular}{c|c}
+      \TeX & \LaTeX \\ \hline
+      テフ & ラテフ
+    \end{tabular}
+    \caption{\LaTeX , \TeX の読み方}
+  \end{minipage}
+  \begin{minipage}{0.45\columnwidth}
+    \centering
+    \caption{\LaTeX , \TeX の読み方}
+    \begin{tabular}{c|c}
+      \TeX & \LaTeX \\ \hline
+      テフ & ラテフ
+    \end{tabular}
+\end{minipage}
+\end{table}
+
+\subsection{center環境の誤用}
+図や表の中央揃えの方法を間違っている人も多くいます．
+中央揃えの効果を持つものにcenter環境と呼ばれるものとcenteringコマンドと呼ばれるものがあります．
+これらを混同して使っている人が多くいます．図はcenteringコマンドを使わないと，図とキャプションの間が
+不自然に空いてしまうので使わないようにしてください．center環境は文章を中央揃えにしたい時に使います．
+\begin{tcolorbox}[title=中央揃え]
+\begin{excode}
+  \begin{table}[h]
+    \caption{\LaTeX , \TeX の読み方}
+    \begin{center}
+      \begin{tabular}{c|c}
+        \TeX & \LaTeX \\ \hline
+        テフ & ラテフ
+      \end{tabular}
+    \end{center}
+  \end{table}
+  \begin{table}[h]
+    \caption{\LaTeX , \TeX の読み方}
+    \centering
+    \begin{tabular}{c|c}
+      \TeX & \LaTeX \\ \hline
+      テフ & ラテフ
+    \end{tabular}
+  \end{table}
+\end{excode}
+\end{tcolorbox}
+
+\begin{table}[h]
+\centering
+  \begin{minipage}{0.45\columnwidth}
+    \caption{\LaTeX , \TeX の読み方}
+    \begin{center}
+      \begin{tabular}{c|c}
+        \TeX & \LaTeX \\ \hline
+        テフ & ラテフ
+      \end{tabular}
+    \end{center}
+  \end{minipage}
+  \begin{minipage}{0.45\columnwidth}
+    \caption{\LaTeX , \TeX の読み方}
+    \centering
+    \begin{tabular}{c|c}
+      \TeX & \LaTeX \\ \hline
+      テフ & ラテフ
+    \end{tabular}
+\end{minipage}
+\end{table}
+
+\subsection{強制改行の乱用}
+よく，強制改行(\verb|\\,\newline|)を乱用している人がいますが，これは極力使わないようにしましょう．
+特に，段落を改める時に使っている人が多いです．改段落する場合はソース内で2回改行するか，
+\verb|\par|コマンドを使うことでできます．
+\begin{tcolorbox}[title=改段落]
+  \begin{verbatim}
+    〜である．\\
+    実験結果は〜
+  \end{verbatim}
+  \begin{verbatim}
+    〜である．
+
+    実験結果は〜
+  \end{verbatim}
+  \tcblower
+  〜である． \\
+  実験結果は〜 \\
+  〜である． \\
+  \ \ 実験結果は〜
+\end{tcolorbox}
+
+\subsection{ディスプレイ数式モードとインライン数式モードの違い}
 ディスプレイ数式モードとインライン数式モードでは大型演算子の上付き文字や下付き文字が異なります．
 よって，適切な数式モードを選択する必要があります．
 \problembox{大型演算子}{$\displaystyle\sum_{n=0}^\infty f(n) + f(n+1)$}{$\sum_{n=0}^\infty f(n) + f(n+1)$}
 
+\subsection{関数名の字体の誤り}
 三角関数や指数・対数関数の数式コマンドはきちんと用意されているので適切なコマンドを使いましょう．
 三角関数のsinは\LaTeX のコマンドでは\verb|\sin|ですが，\verb|sin|と
 そのまま書いてしまう人が多いようです．これでは変数$s$と変数$i$と変数$n$の積という意味になってしまい，
@@ -35,19 +200,23 @@
 すぐつきます．
 \problembox{関数}{$\sin$}{$sin$}
 
+\subsection{bmod,pmodの違い}
 合同式といえばmodですが，このmodには\verb|\bmod|と\verb|\pmod|の2つがあります．
 \verb|\bmod|は$x^2 \bmod p = a$と，右辺に剰余が来る時に使う括弧がないmod演算子に対して使います．
 合同式に対しては使わないので注意してください．
 \verb|\pmod|は$x^2 \equiv a \pmod p$といった具合に合同式に用いることができるのでこちらを使いましょう．
 \problembox{合同式}{$x^2 \equiv a \bmod p$}{$x^2 \equiv a \pmod p$}
 
-集合表現の一つとして$\left\{x \mid P(x) = 0\right\}$という表現がありますが，
-この表現の中に出てくる|をそのままの記号で入力する人が多いですが，この記号に
-対しても\LaTeX はコマンドを用意してあるのでそちらを使ってください．\verb|\mid|という
-コマンドで|を入力することができます．直接記号を入力したときと違って左右に適切な余白を
+\subsection{バーティカルバー(\textbar )を表示するコマンドの使い分けについて}
+集合表現の一つとして$\left\{x \mid P(x) = 0\right\}$というがありますが，
+このの表現の中に出てくる\textbar をそのまま記号で入力する人が多いです．
+この記号を表示する為のコマンドも\LaTeX にはあります．
+\verb|\mid|コマンドで\textbar を入力することができます．直接記号を入力したときと違って左右に適切な余白を
 空けてくれます．
+\footnote{絶対値については\textbackslash midではなく直接\textbar を入力します．ノルム($\|$)は\textbackslash\textbar を入力します．} \\
 \problembox{集合表現}{$\left\{x \mid P(x) = 0\right\}$}{$\left\{x | P(x) = 0\right\}$}
 
+\subsection{複数の文字を含む上付き文字，下付き文字の表現方法}
 \LaTeX は変数の表現として下付き文字や上付き文字を使うことができます．この上付き文字，下付き文字は
 1文字の時と2文字以上の時で書き方が異なります．1文字の時は\verb|x^n|とすれば，$x^n$と表示されますが，
 \verb|x^n+1|は$x^n+1$と表示されてしまいます．\verb|x^{n+1}|と書くことで$x^{n+1}$と
@@ -56,9 +225,11 @@
 {$\displaystyle\lim_{x \rightarrow \infty} \frac{1}{x}$}%
 {$\displaystyle\lim_x \rightarrow \infty \frac{1}{x}$}
 
+\subsection{大型演算子を囲う括弧の表現方法}
 \LaTeX では大型演算子を使う時は括弧の書き方が変わります．普
 通，数式で使う括弧は\verb|(),\{\},[]|などで表現することができますが，
-大型演算子を使うことは括弧のサイズを合わせるために括弧の前に\verb|\left,\right|をつける必要があります．
+大型演算子を使う時は括弧のサイズを合わせるために括弧の前に\verb|\left,\right|をつける必要があります
+\footnote{絶対値(\textbackslash left\textbar \textbackslash right\textbar )も然り}
 \problembox{括弧}%
 {$\displaystyle a_n = \frac{1}{\sqrt{5}}\left\{\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right\}$}%
 {$\displaystyle a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n - (\frac{1-\sqrt{5}}{2})^n\}$}
@@ -70,8 +241,12 @@ $a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n - (\frac{1-\sqrt{5}}{2})^n\}
 \end{tabular}
 }\end{center}
 
-\begin{center}{
-\LaTeX , \TeX LaTeX, TeX
-}\end{center}
+数式などで無限を表す時などはドットを使って省略しますが，このドットにも正式なコマンドがあります．
+普通のドットを3つ連続させるよりも余白が適切に設定されるのでそちらを使いましょう．
+\problembox{ドット}{$\bm{p}=\{2,3,5,7,11,...\}$}{$\bm{p}=\{2,3,5,7,11,\ldots\}$}
 
+\section{さいごに}
+ここで紹介したのは，これから卒業まで書いているレポートや論文の中でよくある間違いをピックアップしたに過ぎません．
+他にも，誤用されたまま紹介されている\LaTeX のコマンドや古い書き方が紹介されていることもあります．
+それら誤用と正しい使い方を紹介したサイト\footnote{\url{http://ichiro-maruta.blogspot.jp/2013/03/latex.html}}がありますので是非参考にしてください．
 \end{document}

@@ -1,0 +1,95 @@
+\RequirePackage{pgf}
+\RequirePackage{tikz}
+\RequirePackage{calc}
+
+\newcounter{deep}
+
+\newlength{\treeBold}
+\def\Tree#1#2#3#4#5{{%
+  \pgfmathsetmacro{\xA}{#1}
+  \pgfmathsetmacro{\yA}{#2}
+  \pgfmathsetmacro{\R}{#3}
+  \pgfmathsetmacro{\Degree}{#4}
+  \setcounter{deep}{#5}
+  \setlength{\treeBold}{\value{deep} pt}
+
+  \pgfmathsetmacro{\xB}{\xA - \R*cos(\Degree)}
+  \pgfmathsetmacro{\yB}{\yA + \R*sin(\Degree)}
+  \draw[line width=\treeBold] (\xA, \yA) -- (\xB, \yB);
+  \ifnum \value{deep}=1
+  \else
+  \pgfmathsetmacro{\newR}{0.8*\R}
+  \pgfmathrandominteger{\a}{0}{60}
+  \pgfmathsetmacro{\newAngleLeft}{\Degree+\a}
+  \pgfmathrandominteger{\a}{0}{60}
+  \pgfmathsetmacro{\newAngleRight}{\Degree-\a}
+  \Tree{\xB}{\yB}{\newR}{\newAngleLeft}{#5-1}
+  \Tree{\xB}{\yB}{\newR}{\newAngleRight}{#5-1}
+  \fi
+}}
+
+\def\circleR#1#2#3#4{{
+\pgfmathsetmacro{\xA}{#1}
+\pgfmathsetmacro{\yA}{#2}
+\pgfmathsetmacro{\R}{#3}
+\setcounter{deep}{#4}
+
+\draw[ultra thin] (\xA, \yA) circle (\R);
+
+\pgfmathsetmacro{\newR}{\R/2}
+
+\ifnum \value{deep}=1
+\else
+\circleR{\xA - \newR}{\yA}{\newR}{#4-1}
+\circleR{\xA + \newR}{\yA}{\newR}{#4-1}
+\fi
+}}
+
+\def\Koch#1#2#3#4#5{{%
+  \pgfmathsetmacro{\X}{#1}
+  \pgfmathsetmacro{\Y}{#2}
+  \pgfmathsetmacro{\R}{#3}
+  \pgfmathsetmacro{\Degree}{#4}
+
+  \pgfmathsetmacro{\newR}{\R / 3}
+  \pgfmathsetmacro{\xA}{\X + \newR*cos(\Degree)}
+  \pgfmathsetmacro{\yA}{\Y + \newR*sin(\Degree)}
+  \pgfmathsetmacro{\xB}{\X + 2*\newR*cos(\Degree)}
+  \pgfmathsetmacro{\yB}{\Y + 2*\newR*sin(\Degree)}
+  \pgfmathsetmacro{\xC}{\X + 3*\newR*cos(\Degree)}
+  \pgfmathsetmacro{\yC}{\Y + 3*\newR*sin(\Degree)}
+  \pgfmathsetmacro{\xD}{\xA + \newR*cos(\Degree+60)}
+  \pgfmathsetmacro{\yD}{\yA + \newR*sin(\Degree+60)}
+  \setcounter{deep}{#5}
+
+  \ifnum \value{deep}=1
+    \draw[ultra thin] (\X, \Y) -- (\xA, \yA);
+    \draw[ultra thin] (\xA, \yA) -- (\xD, \yD);
+    \draw[ultra thin] (\xD, \yD) -- (\xB, \yB);
+    \draw[ultra thin] (\xB, \yB) -- (\xC, \yC);
+  \else
+    \Koch{\X}{\Y}{\newR}{\Degree}{#5-1}
+    \Koch{\xB}{\yB}{\newR}{\Degree}{#5-1}
+    \Koch{\xA}{\yA}{\newR}{\Degree+60}{#5-1}
+    \Koch{\xD}{\yD}{\newR}{\Degree-60}{#5-1}
+  \fi
+}}
+
+
+\def\gasket#1#2#3#4{{
+  \pgfmathsetmacro{\xA}{#1}
+  \pgfmathsetmacro{\yA}{#2}
+  \pgfmathsetmacro{\R}{#3}
+  \pgfmathsetmacro{\xB}{\xA+\R/2}
+  \pgfmathsetmacro{\yB}{\yA+\R*sqrt(3)/2}
+  \pgfmathsetmacro{\xC}{\xA+\R}
+  \pgfmathsetmacro{\yC}{\yA}
+  \setcounter{deep}{#4}
+  \draw[ultra thin] (\xA,\yA) -- (\xB,\yB) -- (\xC,\yC) -- (\xA,\yA);
+  \ifnum \value{deep}=1
+  \else
+  \gasket{\xA}{\yA}{\R/2}{#4-1}
+  \gasket{\xA+\R/4}{\yA+\R*sqrt(3)/4}{\R/2}{#4-1}
+  \gasket{\xA+\R/2}{\yA}{\R/2}{#4-1}
+  \fi
+}}

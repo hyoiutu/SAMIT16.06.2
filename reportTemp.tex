@@ -3,6 +3,7 @@
 %\documentclass[a4j,notitlepage, dvipdfmx]{jsarticle} % タイトルだけのページを作らない
 \documentclass[a4j,titlepage,dvipdfmx,uplatex]{jsarticle}   % タイトルだけのページを作る
 %------------------------------------- パッケージ読み込み
+\usepackage[ipaex]{pxchfon} % IPAフォントを使うため
 \usepackage{amsmath} % align環境を使う為のパッケージ
 \usepackage[dvipdfmx]{graphicx} % includegraphicsコマンドを使うためのパッケージ
 \usepackage{here} % Hオプションを使うため
@@ -14,6 +15,16 @@
 \usepackage{verbatim} % verbatiminputを使うため
 \usepackage{tikz} % texに直接図を埋め込むため
 \usepackage{gnuplot-lua-tikz} % texに直接図を埋め込むため
+\usepackage[dvipdfmx]{hyperref}
+\usepackage{pxjahyper}
+\hypersetup{% hyperrefオプションリスト
+setpagesize=false,
+ bookmarksnumbered=true,%
+ bookmarksopen=true,%
+ colorlinks=true,%
+ linkcolor=blue,
+ citecolor=red,
+}
 %------------------------------------- mintedの設定
 \newminted[myMinted]{c}{%
   linenos,
@@ -58,15 +69,15 @@
   frame=single%
 } % あらかじめlistingの設定を書いておく
 %------------------------------------- タイトルの設定
-\title{レポートのタイトル}
-\author{レポートの作者 \and
+\title{hoge}
+\author{FujiwaLaTeX \and
         レポートの作者その2 \and
         レポートの作者その3}
-\date{XXXX年XX月XX日}
-%\date{\today} 今日の日付が入る
+%\date{2016年07月17日}
+\date{\today} %今日の日付が入る
+
 
 \begin{document}
-
 %------------------------------------- タイトル，目次の出力
   \maketitle % タイトル，著者，日付が出力される
   \tableofcontents % 目次が出力される
@@ -81,6 +92,25 @@
   \subsection*{小節(節番号なし)}
   \subsubsection*{小々節(節番号なし)}
   コマンドの後に*を付けると節番号が出力されない．
+%------------------------------------- 特殊文字
+\section{特殊文字，ロゴの出力}
+それぞれ特殊文字は以下のように出す．
+\# ,
+\$ ,
+\% ,
+\& ,
+\_ ,
+\{ ,
+\} ,
+\textbackslash , % \(バックスラッシュ)
+\textasciitilde , % ~(チルダ)
+\textasciicircum % ^(ハット)
+
+ロゴは以下のように出す．
+\TeX ,
+\LaTeX ,
+\LaTeXe
+
 %------------------------------------- 箇条書き
   \section{箇条書き}
   \subsection{itemize}
@@ -93,6 +123,11 @@
       \item 入れ子
       \item 構造も
       \item この通り
+      \begin{itemize}
+        \item a
+        \item b
+        \item c
+      \end{itemize}
     \end{itemize}
   \end{itemize}
 
@@ -107,45 +142,44 @@
   \subsection{description}
   自由に項目を付けるにはdescription環境を使う．
   \begin{description}
-      \item[□] 様々な
-      \item[△] 項目に
-      \item[◇] なっているはず
+      \item[ああああ] 様々な
+      \item[いいい] 項目に
+      \item[うううう] なっているはず
   \end{description}
 %------------------------------------- 数式
   \section{数式を使う}
   \subsection{インライン数式モード}
-  文章中に数式を埋め込む場合はインライン数式モードを使う．この式$f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}$は
-  フーリエ逆変換の離散スペクトルの場合であり，
-  次の式$f(t) = \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega$は
-  連続スペクトルの場合である．
+  文章中に数式を埋め込む場合はインライン数式モードを使う．ガンマ関数は
+  $\Gamma(z)=\int_0^\infty t^{z-1}e^{-t}dt$と表され，リーマンゼータ関数は
+  $\zeta(s)=\sum_{n=1}^\infty\frac{1}{n^s}$と表される．
 
   \subsection{ディスプレイ数式モード}
   数式だけの行を作りたいのであればディスプレイ数式モードを使う．
 
   \subsubsection{数式が1行の場合}
-  equation環境を使う
+  数式番号をつける場合はequation環境を使う．
   \begin{equation} % 数式番号がつく
-    f(t) = \sum_{n=-\infty}^{\infty} F_n e^{int}
+    \Gamma(z)=\int_0^\infty t^{z-1}e^{-t}dt
   \end{equation}
-
-  末尾に数式番号を付けたくない場合はequation*環境を使う
+  数式番号をつけない場合はequation*環境を使う．
   \begin{equation*} % 数式番号がつかない
-  	f(t) = \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega
+  	\zeta(s)=\sum_{n=1}^\infty\frac{1}{n^s}
   \end{equation*}
 
   \subsubsection{数式が複数行の場合}
   \begin{align*} % *をなくすと数式番号が末尾につく
-    \intertext{離散スペクトルの場合は}
-    f(t) &= \sum_{n=-\infty}^{\infty} F_n e^{int} \\
-    \intertext{と表され，連続スペクトルの場合は}
-    f(t) &= \frac{1}{2\pi}\int_{-\infty}^{\infty}F(\omega)e^{i\omega t} d\omega \\
+    \intertext{ガンマ関数は}
+    \Gamma(z) &= \int_0^\infty t^{z-1}e^{-t}dt\\
+    \intertext{と表され，ゼータ関数は}
+    \zeta(s) &= \sum_{n=1}^\infty\frac{1}{n^s} \\
+             &= \frac{1}{\Gamma(s)}\int_0^\infty\frac{u^{s-1}}{e^u-1}du
     \intertext{のように表される．}
   \end{align*}
-
 %------------------------------------- 図の挿入
   \section{図表の挿入}
   \subsection{図}
   図はjpg,png,bmp,gif,eps,pdfなどが入る．レポートの図であればベクタ画像%
+  % \footnote{ここに入れると注釈が入る}
   \footnote{いくら拡大しても荒くならない．色のドット情報で表されるのがラスタ画像(jpg,png,bmp,gifなど)で，
   線の情報で表されるのがベクタ画像(eps,pdf,svgなど)}でありながら軽いpdfをおすすめする．
   \begin{figure}[H]
@@ -154,8 +188,23 @@
     \caption{$\frac{\sin{x}}{\frac{\cos{x}}{\tan{x}}}$}
     \label{fig:tri}
   \end{figure}
-  図\ref{fig:tri}は参照されている図である．
+  図\ref{fig:tri}のように番号を参照できる．
+  labelは図の番号を参照するための名前である．refでlabelから図の番号を参照できる．labelは図だけでなく
+  様々なものにつけられる．
+  \begin{itemize}
+    \item 図
+    \item 表
+    \item セクション
+    \item 箇条書きの項目
+    \item ソースコード
+  \end{itemize}
+  などがある．labelの名前の付け方には慣例があり，名前からlabelが図についているのか表についているのか
+  などを判断できるようにする．図の場合\verb|\label{fig:hogehoge}|や表の場合は
+  \verb|\label{tab:fugafuga}|などと:で区切った左に識別子をつけるといった具合である.参照する時は
+  \verb|\ref{fig:hogehoge}|,\verb|\ref{tab:fugafuga}|とする．
+
   %------------------------------------- 表の挿入
+  \subsection{表}
   \begin{table}[H]
     \centering
     \caption{謎の表}
@@ -170,6 +219,7 @@
       Armadillo   & frozen       & 8.99       \\ \hline
     \end{tabular}
   \end{table}
+
   表\ref{tab:testTab}である．このように参照できる．
 
   \subsection{複数の表や図を並べて表示する}
@@ -191,13 +241,21 @@
   \end{figure}
 %------------------------------------- ソースコードの挿入
   \section{ソースコードを載せる}
-  \begin{listing}[htbp]
+  \subsection{minted}
+  \begin{listing}[H]
     \caption{初回に必要なコマンド}
     \begin{shellcode}
       sudo apt install python-pygments
     \end{shellcode}
   \end{listing}
-  \subsection{minted}
+  また，mintedを含むtexファイルをコンパイルする時は以下のようにオプションをつける．
+  \begin{listing}[H]
+    \caption{コンパイル時必要なオプション}
+    \begin{shellcode}
+      platex -shell-escape hoge.tex
+      dvipdfmx hoge.dvi
+    \end{shellcode}
+  \end{listing}
   \begin{myMinted}
     #include<stdio.h>
 
@@ -228,17 +286,20 @@
       }
     \end{verbatim}
   \end{breakitembox}
+  \begin{breakitembox}[l]{breakitembox}
+    \verbatiminput{fractal.sty}
+  \end{breakitembox}
 
 \section{ソースコードをファイルから載せる}
 \subsection{minted}
-\myMintedfile{test.c}
+\myMintedfile{GCD.c}
 
 \subsection{listing}
-\lstinputlisting[caption=aaa,label=aaa]{test.c}
+\lstinputlisting[caption=aaa,label=aaa]{GCD.c}
 
 \subsection{breakitembox+verbatiminput}
 \begin{breakitembox}[l]{見出し}
-   \verbatiminput{test.c}
+   \verbatiminput{GCD.c}
 \end{breakitembox}
 
 %------------------------------------- gnuplotの図を直接記述
@@ -255,6 +316,28 @@
   replot
   quit
 \end{shellcode}
-\centering
-\resizebox{\columnwidth}{!}{\input{tikztest}}
+gnuplotのグラフをtexファイルに変換した後，\verb|\input|コマンドでtexファイルを読み込む．
+
+\resizebox{\columnwidth}{!}{\centering\input{tikztest}}
+
+\section{参考文献を載せる}
+\begin{thebibliography}{99}
+  \bibitem[hoge] 文献名,著者名1,著者名2, ... 著者名N,その他の情報
+  \bibitem[fuga] 文献名,著者名1,著者名2, ... 著者名N,その他の情報
+  ...
+\end{thebibliography}
+\appendix
+\section{おすすめのサイト}
+マウス操作で表を書くことができ，\LaTeX のコードを自動生成してくれるサイト \\
+\href{http://www.tablesgenerator.com/latex_tables}{tables generator} \\
+リボンから数学記号を選んだり，手書き認識で自動的に\LaTeX の数式を生成してくれるサイト \\
+\href{https://www.latex4technics.com/}{LaTeX4technics} \\
+\LaTeX にソースコードを載せる方法を詳述しているサイト \\
+\href{http://muscle-keisuke.hatenablog.com/}{muscle\_keisukeの日記} \\
+Web上で\LaTeX の編集，コンパイルができるサイト \\
+\href{https://cloudlatex.io/}{Cloud LaTeX} \\
+\href{https://www.overleaf.com/}{Overleaf} \\
+手書き認識で数式などを書けるサイト \\
+\href{https://webdemo.myscript.com/index.html}{MyScript}
+
 \end{document}

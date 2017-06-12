@@ -1,0 +1,39 @@
+\documentclass[a4j,uplatex,dvipdfmx]{beamer}
+\usepackage{minted}
+\usepackage{spverbatim}
+\usetheme{SAMIT}
+\title{latexmkの導入}
+\author{FujiwaLaTeX}
+\institute{室蘭工業大学工学研究科 情報電子工学系専攻}
+\begin{document}
+\maketitle
+\begin{frame}[fragile]{\LaTeX 文書のタイプセット}
+  \begin{minted}{shell}
+    platex hogehoge.tex
+    dvipdfmx hogehoge.dvipdfmx
+    evince hogehoge.pdf
+  \end{minted}
+  \onslide<2>{\LARGE ソースの修正の度に3つコマンドを実行}
+\end{frame}
+\begin{frame}{latexmkとは}
+  \LaTeX のソースの変更を検知し，\\
+  自動的にタイプセットを行うスクリプト
+\end{frame}
+\begin{frame}{latexmkとは}
+  \begin{itemize}
+    \item ファイルを保存するだけでタイプセット
+    \item 自動でPDFを開いてくれる
+    \item 画像の差し替えにも対応
+  \end{itemize}
+\end{frame}
+\begin{frame}{latexmkの導入}
+  さっそくlatexmkの導入と行きたいところですが...
+    \onslide<2>{\begin{center}
+    \Large 実はtexlive2016/2017は導入済み
+    \end{center}}
+\end{frame}
+\begin{frame}{使い方}
+  ホームディレクトリに設定ファイル(.latexmkrc)を設置して\\
+  コマンドを走らせるだけ
+\end{frame}
+\end{document}
