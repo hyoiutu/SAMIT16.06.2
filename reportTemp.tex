@@ -4,7 +4,8 @@
 \documentclass[a4j,titlepage,dvipdfmx,uplatex]{jsarticle}   % タイトルだけのページを作る
 %------------------------------------- パッケージ読み込み
 \usepackage[ipaex]{pxchfon} % IPAフォントを使うため
-\usepackage{amsmath} % align環境を使う為のパッケージ
+\usepackage{amsmath} % align環境,cases環境を使う為のパッケージ
+\usepackage{empheq} % empheq環境を使う為のパッケージ
 \usepackage[dvipdfmx]{graphicx} % includegraphicsコマンドを使うためのパッケージ
 \usepackage{here} % Hオプションを使うため
 \usepackage[cache=false]{minted} % mintedを使うため
@@ -73,7 +74,7 @@ setpagesize=false,
 \author{FujiwaLaTeX \and
         レポートの作者その2 \and
         レポートの作者その3}
-%\date{2016年07月17日}
+%\date{2017年06月17日}
 \date{\today} %今日の日付が入る
 
 
@@ -165,8 +166,13 @@ setpagesize=false,
   \begin{equation*} % 数式番号がつかない
   	\zeta(s)=\sum_{n=1}^\infty\frac{1}{n^s}
   \end{equation*}
+  もしくは\verb|\[...\]|環境を使う
+  \[% 数式番号がつかない
+  \zeta(s)=\sum_{n=1}^\infty\frac{1}{n^s}
+  \]
 
   \subsubsection{数式が複数行の場合}
+  align環境を使う．
   \begin{align*} % *をなくすと数式番号が末尾につく
     \intertext{ガンマ関数は}
     \Gamma(z) &= \int_0^\infty t^{z-1}e^{-t}dt\\
@@ -175,17 +181,94 @@ setpagesize=false,
              &= \frac{1}{\Gamma(s)}\int_0^\infty\frac{u^{s-1}}{e^u-1}du
     \intertext{のように表される．}
   \end{align*}
+\subsection{特殊な数式}
+\subsubsection{行列}
+通常の行列はpmatrix環境で出力できる．
+\begin{equation*}
+  \begin{pmatrix}
+    x' \\ y'
+  \end{pmatrix}
+  =
+  \begin{pmatrix}
+    \cos\theta & -\sin\theta \\
+    \sin\theta & \cos\theta
+  \end{pmatrix}
+  \begin{pmatrix}
+    x \\ y
+  \end{pmatrix}
+\end{equation*}
+また，bmatrix環境だと，角括弧で出力される．
+\begin{equation*}
+  \begin{bmatrix}
+    x' \\ y'
+  \end{bmatrix}
+  =
+  \begin{bmatrix}
+    \cos\theta & -\sin\theta \\
+    \sin\theta & \cos\theta
+  \end{bmatrix}
+  \begin{bmatrix}
+    x \\ y
+  \end{bmatrix}
+\end{equation*}
+行列式はvmatrix環境で出力できる．
+\begin{equation*}
+\begin{vmatrix}
+  a & b \\
+  c & d
+\end{vmatrix}
+= ad - bc
+\end{equation*}
+\subsubsection{連立方程式}
+連立方程式は演習の手引書にはarray環境を使った方法が書かれているが，
+ここでは余白の空き方などの観点からcases環境をおすすめする．
+amsmathパッケージが読み込まれていることが必須である．
+\begin{equation*}
+  \left|x\right| =
+  \begin{cases}
+    x & x \geq 0 \mathrm{のとき} \\
+    -x & \mathrm{それ以外のとき}
+  \end{cases}
+\end{equation*}
+また，連立方程式の左側についている波括弧を変更したい場合は，
+cases環境ではなく，empheq環境を使うのが良い．empheqパッケージを読み込むことが必須である．
+\begin{empheq}[left={\left|x\right|=\empheqlangle}]{alignat*=2}
+  x & \quad x \geq 0 \mathrm{のとき} \\
+  -x & \quad \mathrm{それ以外のとき}
+\end{empheq}
+表\ref{tab:empheqbraces}にempheq環境に使える括弧の種類を示す．
+\begin{table}[htbp]
+\centering
+\caption{empheqに使える括弧一覧}
+\label{tab:empheqbraces}
+\begin{tabular}{|c|c|}
+\hline
+コマンド          & 括弧の種類  \\ \hline
+\textbackslash empheqlbrace & \{                \\ \hline
+\textbackslash empheqrbrace & \}                \\ \hline
+\textbackslash empheqlbrack & {[}               \\ \hline
+\textbackslash empheqrbrack & {]}               \\ \hline
+\textbackslash empheqlangle & \textless         \\ \hline
+\textbackslash empheqrangle & \textgreater      \\ \hline
+\textbackslash empheqlparen & (                 \\ \hline
+\textbackslash empheqrparen & )                 \\ \hline
+\textbackslash empheqlvert  & \textbar          \\ \hline
+\textbackslash empheqrvert  & \textbar          \\ \hline
+\textbackslash empheqlVert  & \textbar\textbar  \\ \hline
+\textbackslash empheqrVert  & \textbar\textbar  \\ \hline
+\end{tabular}
+\end{table}
 %------------------------------------- 図の挿入
   \section{図表の挿入}
   \subsection{図}
   図はjpg,png,bmp,gif,eps,pdfなどが入る．レポートの図であればベクタ画像%
   % \footnote{ここに入れると注釈が入る}
   \footnote{いくら拡大しても荒くならない．色のドット情報で表されるのがラスタ画像(jpg,png,bmp,gifなど)で，
-  線の情報で表されるのがベクタ画像(eps,pdf,svgなど)}でありながら軽いpdfをおすすめする．
+  線の情報で表されるのがベクタ画像(eps,pdf,svgなど)}でかつ，コンパイルが遅くならないpdfをおすすめする．
   \begin{figure}[H]
     \centering
     \includegraphics[width=\columnwidth]{test.pdf}
-    \caption{$\frac{\sin{x}}{\frac{\cos{x}}{\tan{x}}}$}
+    \caption{$\cos\sin\tan x$}
     \label{fig:tri}
   \end{figure}
   図\ref{fig:tri}のように番号を参照できる．
@@ -199,8 +282,8 @@ setpagesize=false,
     \item ソースコード
   \end{itemize}
   などがある．labelの名前の付け方には慣例があり，名前からlabelが図についているのか表についているのか
-  などを判断できるようにする．図の場合\verb|\label{fig:hogehoge}|や表の場合は
-  \verb|\label{tab:fugafuga}|などと:で区切った左に識別子をつけるといった具合である.参照する時は
+  などを判断できるようにする．図の場合\verb|\label{fig:hogehoge}|,表の場合は
+  \verb|\label{tab:fugafuga}|などと:で区切った左に識別子をつけるといった具合である.もちろん参照する時は
   \verb|\ref{fig:hogehoge}|,\verb|\ref{tab:fugafuga}|とする．
 
   %------------------------------------- 表の挿入
@@ -327,7 +410,7 @@ gnuplotのグラフをtexファイルに変換した後，\verb|\input|コマン
   ...
 \end{thebibliography}
 \appendix
-\section{おすすめのサイト}
+\section{おすすめのサイト}\noindent
 マウス操作で表を書くことができ，\LaTeX のコードを自動生成してくれるサイト \\
 \href{http://www.tablesgenerator.com/latex_tables}{tables generator} \\
 リボンから数学記号を選んだり，手書き認識で自動的に\LaTeX の数式を生成してくれるサイト \\

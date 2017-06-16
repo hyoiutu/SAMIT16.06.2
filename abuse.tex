@@ -1,6 +1,8 @@
 \documentclass[dvipdfmx,uplatex]{jsarticle}
 \usepackage{amsmath,amssymb}
 \usepackage{ascmac}
+\usepackage{color}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 \usepackage{tcolorbox}
 \usepackage{minted}
 \usepackage{caption}
@@ -15,6 +17,14 @@
  linkcolor=blue,
  citecolor=red,
 }
+
+\definecolor{correctcolor}{rgb}{0.59, 0.78, 0.64}
+\definecolor{correctcolor}{rgb}{0.52, 0.73, 0.4}
+\definecolor{wrongcolor}{rgb}{0.91, 0.59, 0.48}
+
+\DeclareMathOperator{\divergence}{\mathrm{div}}
+\DeclareMathOperator{\grad}{\mathrm{grad}}
+\DeclareMathOperator{\rot}{\mathrm{rot}}
 
 \newminted[excode]{latex}{%
     linenos,
@@ -37,38 +47,167 @@
   \end{tcolorbox}
 }
 
-\title{よく誤用する\LaTeX のコマンド}
+\newtcbox{\correctbox}[1][]{colframe=correctcolor, #1}
+\newtcbox{\wrongbox}[1][]{colframe=wrongcolor, #1}
+
+\title{誤った\LaTeX の書き方と正しい書き方について}
+\author{Fujiwa\LaTeX}
 \begin{document}
+\maketitle
+\tableofcontents
 \section{はじめに}
-この文書はレポートを書く学生がよく間違う，また，古くて諸問題を抱えた%
+この文書はレポートを書く学生が使い方を間違う\LaTeX の書き方や，
+また，古くて様々な問題を抱えた\LaTeX の書き方について説明し，その正しい書き方や対処法などを載せたものです．%
 \footnote{この大学の講義やレポートのテンプレート，教科書，配布資料などに記載されている\LaTeX にも古い書き方がいっぱいある}%
 \LaTeX のコマンドや書き方などを掲載したものです．
+\section{古いクラスファイルの使用}
+\subsection{非推奨クラスファイルjarticleの使用}
+演習で使っているクラスファイルはjsarticleという名前のファイルです．
+しかし，このクラスファイルは古いファイルとして非推奨となっています．
+なぜなら，jarticleは日本語文書用のクラスファイルであるにも関わらず，
+左右の余白が欧文仕様だからです．新しいクラスファイルとして，jsarticleやbxjsarticleが
+あるのでそれを使いましょう．
+\begin{tcolorbox}[title=古いクラスファイルと新しいクラスファイル]
+  \begin{tcolorbox}[title=jarticle, colframe=wrongcolor]
+    \begin{excode}
+      \documentclass[dvipdfmx]{jarticle}
+    \end{excode}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=jsarticle, colframe=correctcolor]
+    \begin{excode}
+      \documentclass[dvipdfmx,uplatex]{jarticle}
+    \end{excode}
+  \end{tcolorbox}
+\end{tcolorbox}
+\begin{figure}[H]
+  \begin{tabular}{cc}
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \fbox{\includegraphics[width=0.9\columnwidth]{jarticleEx.pdf}}
+      \caption{jarticleクラスを使った文書の例}
+    \end{minipage}
+    \begin{minipage}{0.45\columnwidth}
+      \centering
+      \fbox{\includegraphics[width=0.9\columnwidth]{jsarticleEx.pdf}}
+      \caption{jsarticleクラスを使った文書の例}
+    \end{minipage}
+  \end{tabular}
+\end{figure}
+
+\subsection{ドライバ指定の間違い}
+includegraphicsコマンドなどで画像を読み込む時，graphicxパッケージを読み込みますが，
+この時，\textbackslash usepackage[dvipdfmx]\{graphicx\}のように
+ドライバの指定を行います．しかし，dviからpdfへ変換する際に
+使用しているドライバがdvipdfmxであるにも関わらず，
+何故か\textbackslash usepackage[dvips]\{graphicx\}や，
+\textbackslash usepackage[dvipdfm]\{graphicx\}といった，
+異なるドライバを指定した状態で紹介しているサイトや教科書がいくつかあります．
+異なるドライバを指定した状態でもpdfまでタイプセットをすることができますが，
+図が正常な位置に配置されなかったり，ドライバの指定を正した時に図が全てずれたりします．
+なので，ドライバの指定は適切に行う必要があります．
+
+ドライバの指定はdocumentclassのオプションで行うことができるので，
+\textbackslash documentclass[dvipdfmx]\{jsarticle\}としておけば，
+ドライバ指定が必要なパッケージでわざわざドライバを指定する必要がなくなります．
+\begin{tcolorbox}[title=ドライバの指定]
+  \begin{tcolorbox}[title=dvipdfmx, colframe=wrongcolor]
+    \begin{excode}
+      \documentclass[dvipdfm,uplatex]{jsarticle}
+      \usepackage{graphicx}
+    \end{excode}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=dvips dvipdfm, colframe=correctcolor]
+    \begin{excode}
+      \documentclass[dvipdfmx,uplatex]{jsarticle}
+      \usepackage{graphicx}
+    \end{excode}
+    または，
+    \begin{excode}
+      \documentclass[uplatex]{jsarticle}
+      \usepackage[dvipdfmx]{graphicx}
+    \end{excode}
+  \end{tcolorbox}
+\end{tcolorbox}
+
+\subsection{platexの使用}
+現在，演習で使っている処理系はplatexです．
+platexは，JIS第一，第二水準の漢字や和文記号を扱うことができますが，
+その範囲外の記号や漢字を扱うことができません．
+「髙橋」や「山﨑」といった名字特有の漢字はplatexで扱うことができません．
+このような漢字や記号はUnicodeの範囲を扱うことができるuplatexという処理系で出力することができます．
+\begin{tcolorbox}[title=特殊な文字や記号の出力]
+  \begin{tcolorbox}[title=platex, colframe=wrongcolor]
+    \begin{excode}
+      \documentclass[dvipdfmx]{jsarticle}
+    \end{excode}
+    タイプセット時
+    \begin{minted}{shell}
+      platex hoge.tex
+    \end{minted}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=uplatex, colframe=correctcolor]
+    \begin{excode}
+      \documentclass[dvipdfmx,uplatex]{jsarticle}
+    \end{excode}
+    タイプセット時
+    \begin{minted}{shell}
+      uplatex hoge.tex
+    \end{minted}
+  \end{tcolorbox}
+\end{tcolorbox}
+
 \section{コマンドの誤用}
 \subsection{引用符の誤用}
 特定の単語を強調したいときや固有名詞を表す時などにダブルクォーテーションで文を囲むことがあります．
 しかし，左右のダブルクォーテーションが全く同じになっている人が多くいます
 {\footnote{プログラマはプログラム中の文字列を1種類のダブルクォーテーションで囲むのでこの間違いをよくする}．
-\problembox{ダブルクォーテーション}{\TeX\ is "Are"}{\TeX\ is ``Are''}
+\begin{tcolorbox}[title=引用符の誤用]
+  \begin{tcolorbox}[title=同じダブルクォーテーションの使用, colframe=wrongcolor]
+    \begin{excode}
+      \TeX\ is "Are"
+    \end{excode}
+    \TeX\ is "Are"
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=開きクォートと，閉じクォートの使用, colframe=correctcolor]
+    \begin{excode}
+      \TeX\ is ``Are''
+    \end{excode}
+    \TeX\ is ``Are''
+  \end{tcolorbox}
+\end{tcolorbox}
 
 \subsection{図番号，表番号の参照方法の誤り}
-レポートを書く際に表や図を載せることが多々あります．更に，掲載した図や表を文中で参照することもあります．
-この時，「図3より~」などという表現をすることが多いがこの例の3という数字を直接入力している人が多くいます．
+レポートを書く際に表や図を載せることが多々あります．更に，掲載した図や表は文中で参照します．
+この時，「図3より~」などという表現をすることが多いですが，図番号である3という数字を直接入力している人が多くいます．
 レポートを書いている途中では掲載する図や表が増減することがよくあります．
-その際に，文中の参照番号も変えていたら煩わしい上に直し忘れもあるので図や表にラベルを付けてラベル名で参照できるようします．
+その際に，文中の参照番号も手動で変えていたら煩わしい上に直し忘れもあるので図や表にラベルを付けてラベル名で参照できるようにします．
 \begin{tcolorbox}[title=参照番号]
-  \begin{excode}
-    表\ref{tab:ex}は\LaTeX と\TeXの読み方について示したものである．
-  \end{excode}
-  \begin{excode}
-    表1は\LaTeX と\TeXの読み方について示したものである．
-  \end{excode}
-  \tcblower
-    \captionof{table}{\LaTeX と \TeX}\label{tab:ex}
-    \begin{tabular}{c|c}
-      \TeX & \LaTeX \\ \hline
-      テフ & ラテフ
-    \end{tabular}
-  表\ref{tab:ex}は\LaTeX と\TeX の読み方について示したものである．
+  \begin{tcolorbox}[title=label refを使用しない, colframe=wrongcolor]
+    \begin{excode}
+      表1は\LaTeX と\TeXの読み方について示したものである．
+    \end{excode}
+    \begin{center}
+      \captionof{table}{\LaTeX と \TeX}\label{tab:ex}
+      \begin{tabular}{c|c}
+        \TeX & \LaTeX \\ \hline
+        テフ & ラテフ
+      \end{tabular}
+    \end{center}
+  表1は\LaTeX と\TeX の読み方について示したものである．
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=label refを使用する, colframe=correctcolor]
+    \begin{excode}
+      表\ref{tab:ex}は\LaTeX と\TeX の読み方について示したものである．
+    \end{excode}
+    \begin{center}
+      \captionof{table}{\LaTeX と \TeX}\label{tab:ex}
+      \begin{tabular}{c|c}
+        \TeX & \LaTeX \\ \hline
+        テフ & ラテフ
+      \end{tabular}
+    \end{center}
+    表\ref{tab:ex}は\LaTeX と\TeX の読み方について示したものである．
+  \end{tcolorbox}
 \end{tcolorbox}
 
 \subsection{表，図のキャプション位置の間違い}
@@ -76,26 +215,30 @@
 「{\bfseries 表は上にキャプションを付け，図は下にキャプションを付ける}」というルールです．
 これを忘れている人が結構いるので気をつけましょう．
 \begin{tcolorbox}[title=キャプション]
-\begin{excode}
-  \begin{table}[h]
-    \centering
-    \begin{tabular}{c|c}
-      \TeX & \LaTeX \\ \hline
-      テフ & ラテフ
-    \end{tabular}
-    \caption{\LaTeX , \TeX の読み方}
-  \end{table}
-\end{excode}
-\begin{excode}
-  \caption{\LaTeX , \TeX の読み方}
-  \begin{table}[h]
-    \centering
-    \begin{tabular}{c|c}
-      \TeX & \LaTeX \\ \hline
-      テフ & ラテフ
-    \end{tabular}
-  \end{table}
-\end{excode}
+  \begin{tcolorbox}[title=表のキャプションを下に付ける, colframe=wrongcolor]
+    \begin{excode}
+      \begin{table}[h]
+        \centering
+        \begin{tabular}{c|c}
+          \TeX & \LaTeX \\ \hline
+          テフ & ラテフ
+        \end{tabular}
+        \caption{\LaTeX , \TeX の読み方}
+      \end{table}
+    \end{excode}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=表のキャプションを上につける, colframe=correctcolor]
+    \begin{excode}
+      \caption{\LaTeX , \TeX の読み方}
+      \begin{table}[h]
+        \centering
+        \begin{tabular}{c|c}
+          \TeX & \LaTeX \\ \hline
+          テフ & ラテフ
+        \end{tabular}
+      \end{table}
+    \end{excode}
+  \end{tcolorbox}
 \end{tcolorbox}
 \begin{table}[h]
 \centering
@@ -120,30 +263,43 @@
 \subsection{center環境の誤用}
 図や表の中央揃えの方法を間違っている人も多くいます．
 中央揃えの効果を持つものにcenter環境と呼ばれるものとcenteringコマンドと呼ばれるものがあります．
-これらを混同して使っている人が多くいます．図はcenteringコマンドを使わないと，図とキャプションの間が
+これらを混同して使っている人が多くいます．figure環境やtable環境はcenteringコマンドを使わないと，図とキャプションの間が
 不自然に空いてしまうので使わないようにしてください．center環境は文章を中央揃えにしたい時に使います．
 \begin{tcolorbox}[title=中央揃え]
-\begin{excode}
-  \begin{table}[h]
-    \caption{\LaTeX , \TeX の読み方}
-    \begin{center}
-      \begin{tabular}{c|c}
-        \TeX & \LaTeX \\ \hline
-        テフ & ラテフ
-      \end{tabular}
-    \end{center}
-  \end{table}
-  \begin{table}[h]
-    \caption{\LaTeX , \TeX の読み方}
-    \centering
-    \begin{tabular}{c|c}
-      \TeX & \LaTeX \\ \hline
-      テフ & ラテフ
-    \end{tabular}
-  \end{table}
-\end{excode}
+  \begin{tcolorbox}[title=center環境を使用, colframe=wrongcolor]
+    \begin{excode}
+      \begin{table}[h]
+        \caption{\LaTeX , \TeX の読み方}
+        \begin{center}
+          \begin{tabular}{c|c}
+            \TeX & \LaTeX \\ \hline
+            テフ & ラテフ
+          \end{tabular}
+        \end{center}
+      \end{table}
+      \begin{table}[h]
+        \caption{\LaTeX , \TeX の読み方}
+        \centering
+        \begin{tabular}{c|c}
+          \TeX & \LaTeX \\ \hline
+          テフ & ラテフ
+        \end{tabular}
+      \end{table}
+    \end{excode}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=centeringコマンドを使用, colframe=correctcolor]
+    \begin{excode}
+      \begin{table}[h]
+        \centering
+        \caption{\LaTeX , \TeX の読み方}
+        \begin{tabular}{c|c}
+          \TeX & \LaTeX \\ \hline
+          テフ & ラテフ
+        \end{tabular}
+      \end{table}
+    \end{excode}
+  \end{tcolorbox}
 \end{tcolorbox}
-
 \begin{table}[h]
 \centering
   \begin{minipage}{0.45\columnwidth}
@@ -166,24 +322,34 @@
 \end{table}
 
 \subsection{強制改行の乱用}
-よく，強制改行(\verb|\\,\newline|)を乱用している人がいますが，これは極力使わないようにしましょう．
+よく，強制改行(\textbackslash\textbackslash ,\textbackslash newline)を乱用している人がいますが，これは極力使わないようにしましょう．
 特に，段落を改める時に使っている人が多いです．改段落する場合はソース内で2回改行するか，
-\verb|\par|コマンドを使うことでできます．
+\textbackslash parコマンドを使うことでできます．
 \begin{tcolorbox}[title=改段落]
-  \begin{verbatim}
-    〜である．\\
-    実験結果は〜
-  \end{verbatim}
-  \begin{verbatim}
-    〜である．
+  \begin{tcolorbox}[title=強制改行を使う, colframe=wrongcolor]
+    \begin{excode}
+      あなたも先刻同じく同じ発展隊というはずの以上に受けたでし。
+      できるだけ今を仕事院もどうもその尊重ないでまでが片づけてみですがも話申すななが、
+      そうとは定めるんらしくますた。\\
+      自分をありたろのはどうしても今日でけっしてないたた。
+    \end{excode}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=強制改行を使わない, colframe=correctcolor]
+    \begin{excode}
+      あなたも先刻同じく同じ発展隊というはずの以上に受けたでし。
+      できるだけ今を仕事院もどうもその尊重ないでまでが片づけてみですがも話申すななが、
+      そうとは定めるんらしくますた。
 
-    実験結果は〜
-  \end{verbatim}
-  \tcblower
-  〜である． \\
-  実験結果は〜 \\
-  〜である． \\
-  \ \ 実験結果は〜
+      自分をありたろのはどうしても今日でけっしてないたた。
+    \end{excode}
+    または
+    \begin{excode}
+      あなたも先刻同じく同じ発展隊というはずの以上に受けたでし。
+      できるだけ今を仕事院もどうもその尊重ないでまでが片づけてみですがも話申すななが、
+      そうとは定めるんらしくますた。\par
+      自分をありたろのはどうしても今日でけっしてないたた。
+    \end{excode}
+  \end{tcolorbox}
 \end{tcolorbox}
 
 \subsection{ディスプレイ数式モードとインライン数式モードの違い}
@@ -191,48 +357,110 @@
 よって，適切な数式モードを選択する必要があります．
 \problembox{大型演算子}{$\displaystyle\sum_{n=0}^\infty f(n) + f(n+1)$}{$\sum_{n=0}^\infty f(n) + f(n+1)$}
 
-\subsection{関数名の字体の誤り}
+\subsection{数学関数の書体の誤り}
 三角関数や指数・対数関数の数式コマンドはきちんと用意されているので適切なコマンドを使いましょう．
-三角関数のsinは\LaTeX のコマンドでは\verb|\sin|ですが，\verb|sin|と
+三角関数のsinは\LaTeX のコマンドでは\textbackslash sinですが，sinと
 そのまま書いてしまう人が多いようです．これでは変数$s$と変数$i$と変数$n$の積という意味になってしまい，
-「定義されていない」とレポートが再提出になってしまうので気をつけましょう．正常なsinコマンドを
-使うと，文字がセリフ体になり，\textbackslash を付けないとイタリック体になるので見分けは
+「定義されていない」とレポートが再提出になってしまうので気をつけましょう．\textbackslash sinコマンドを
+使うと，文字がローマン体になり，\textbackslash を付けないとイタリック体になるので見分けは
 すぐつきます．
-\problembox{関数}{$\sin$}{$sin$}
+\begin{tcolorbox}[title=数学関数の書体の誤り]
+  \begin{tcolorbox}[title=数学関数のコマンドを使用しない, colframe=wrongcolor]
+    \begin{excode}
+      $sin x$
+    \end{excode}
+    $sin x$
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=数学関数のコマンドを使用する, colframe=correctcolor]
+    \begin{excode}
+      $\sin x$
+    \end{excode}
+    $\sin x$
+  \end{tcolorbox}
+\end{tcolorbox}
 
-\subsection{bmod,pmodの違い}
-合同式といえばmodですが，このmodには\verb|\bmod|と\verb|\pmod|の2つがあります．
-\verb|\bmod|は$x^2 \bmod p = a$と，右辺に剰余が来る時に使う括弧がないmod演算子に対して使います．
-合同式に対しては使わないので注意してください．
-\verb|\pmod|は$x^2 \equiv a \pmod p$といった具合に合同式に用いることができるのでこちらを使いましょう．
-\problembox{合同式}{$x^2 \equiv a \bmod p$}{$x^2 \equiv a \pmod p$}
+数学関数の関数コマンドは\url{http://www.latex-cmd.com/index.html#equation}に全て載っているので，
+数学関数を使う場面になったら，ここからコマンドを調べてください．
 
 \subsection{バーティカルバー(\textbar )を表示するコマンドの使い分けについて}
-集合表現の一つとして$\left\{x \mid P(x) = 0\right\}$というがありますが，
-このの表現の中に出てくる\textbar をそのまま記号で入力する人が多いです．
+集合表現の一つとして$\left\{x \mid P(x) = 0\right\}$がありますが，
+この表現の中に出てくる\textbar をそのまま記号で入力する人が多いです．
 この記号を表示する為のコマンドも\LaTeX にはあります．
-\verb|\mid|コマンドで\textbar を入力することができます．直接記号を入力したときと違って左右に適切な余白を
+\textbackslash midコマンドで\textbar を入力することができます．直接記号を入力したときと違って左右に適切な余白を
 空けてくれます．
-\footnote{絶対値については\textbackslash midではなく直接\textbar を入力します．ノルム($\|$)は\textbackslash\textbar を入力します．} \\
-\problembox{集合表現}{$\left\{x \mid P(x) = 0\right\}$}{$\left\{x | P(x) = 0\right\}$}
+\footnote{絶対値については\textbackslash midではなく直接\textbar を入力します．ノルム($\|$)は\textbackslash\textbar を入力します．}
+\begin{tcolorbox}[title=バーティカルバーの出力方法]
+  \begin{tcolorbox}[title=\textbar を直接入力する, colframe=wrongcolor]
+    \begin{excode}
+      $\left\{x | P(x) = 0\right\}$
+    \end{excode}
+    $\left\{x | P(x) = 0\right\}$
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=\textbackslash mid コマンドを入力する, colframe=correctcolor]
+    \begin{excode}
+      $\left\{x \mid P(x) = 0\right\}$
+    \end{excode}
+    $\left\{x \mid P(x) = 0\right\}$
+  \end{tcolorbox}
+\end{tcolorbox}
 
 \subsection{複数の文字を含む上付き文字，下付き文字の表現方法}
 \LaTeX は変数の表現として下付き文字や上付き文字を使うことができます．この上付き文字，下付き文字は
 1文字の時と2文字以上の時で書き方が異なります．1文字の時は\verb|x^n|とすれば，$x^n$と表示されますが，
 \verb|x^n+1|は$x^n+1$と表示されてしまいます．\verb|x^{n+1}|と書くことで$x^{n+1}$と
 表示されます．下付き文字も同様です．
-\problembox{上付き文字・下付き文字}%
-{$\displaystyle\lim_{x \rightarrow \infty} \frac{1}{x}$}%
-{$\displaystyle\lim_x \rightarrow \infty \frac{1}{x}$}
+\begin{tcolorbox}[title=上付き文字と下付き文字の書き方]
+  \begin{tcolorbox}[title=\{\}で囲まない, colframe=wrongcolor]
+    \begin{excode}
+      \begin{equation*}
+        \lim_x \rightarrow \infty \frac{1}{x}
+      \end{equation*}
+    \end{excode}
+    \begin{equation*}
+      \lim_x \rightarrow \infty \frac{1}{x}
+    \end{equation*}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=\{\}で囲む, colframe=correctcolor]
+    \begin{excode}
+      \begin{equation*}
+        \lim_{x \rightarrow \infty} \frac{1}{x}
+      \end{equation*}
+    \end{excode}
+    \begin{equation*}
+      \lim_{x \rightarrow \infty} \frac{1}{x}
+    \end{equation*}
+  \end{tcolorbox}
+\end{tcolorbox}
 
-\subsection{大型演算子を囲う括弧の表現方法}
+\subsection{大型演算子を囲う括弧のサイズ}
 \LaTeX では大型演算子を使う時は括弧の書き方が変わります．普
-通，数式で使う括弧は\verb|(),\{\},[]|などで表現することができますが，
-大型演算子を使う時は括弧のサイズを合わせるために括弧の前に\verb|\left,\right|をつける必要があります
+通，数式で使う括弧は(),\{\},[]などで表現することができますが，
+大型演算子を使う時は括弧のサイズを合わせるために括弧の前に\textbackslash left,\textbackslash rightをつける必要があります
 \footnote{絶対値(\textbackslash left\textbar \textbackslash right\textbar )も然り}
-\problembox{括弧}%
-{$\displaystyle a_n = \frac{1}{\sqrt{5}}\left\{\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right\}$}%
-{$\displaystyle a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n - (\frac{1-\sqrt{5}}{2})^n\}$}
+\begin{tcolorbox}[title=大型演算子を囲う括弧のサイズ]
+  \begin{tcolorbox}[title=\textbackslash left \textbackslash rightをつけない, colframe=wrongcolor]
+    \begin{excode}
+      \begin{equation*}
+        a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n -
+        (\frac{1-\sqrt{5}}{2})^n\}
+      \end{equation*}
+    \end{excode}
+    \begin{equation*}
+      a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n - (\frac{1-\sqrt{5}}{2})^n\}
+    \end{equation*}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=\textbackslash left \textbackslash right をつける, colframe=correctcolor]
+    \begin{excode}
+      \begin{equation*}
+        a_n = \frac{1}{\sqrt{5}}\left\{\left(\frac{1+\sqrt{5}}{2}\right)^n -
+        \left(\frac{1-\sqrt{5}}{2}\right)^n\right\}
+      \end{equation*}
+    \end{excode}
+    \begin{equation*}
+      a_n = \frac{1}{\sqrt{5}}\left\{\left(\frac{1+\sqrt{5}}{2}\right)^n - \left(\frac{1-\sqrt{5}}{2}\right)^n\right\}
+    \end{equation*}
+  \end{tcolorbox}
+\end{tcolorbox}
 
 \begin{center}{
   \begin{tabular}{cc}
@@ -240,13 +468,137 @@ $\displaystyle a_n = \frac{1}{\sqrt{5}}\left\{\left(\frac{1+\sqrt{5}}{2}\right)^
 $a_n = \frac{1}{\sqrt{5}}\{(\frac{1+\sqrt{5}}{2})^n - (\frac{1-\sqrt{5}}{2})^n\}$
 \end{tabular}
 }\end{center}
-
+\subsection{ドットの出力の仕方の間違い}
 数式などで無限を表す時などはドットを使って省略しますが，このドットにも正式なコマンドがあります．
 普通のドットを3つ連続させるよりも余白が適切に設定されるのでそちらを使いましょう．
-\problembox{ドット}{$\bm{p}=\{2,3,5,7,11,...\}$}{$\bm{p}=\{2,3,5,7,11,\ldots\}$}
+\begin{tcolorbox}[title=ドットの出力方法]
+    \begin{tcolorbox}[title=直接ドットを3つ出力する, colframe=wrongcolor]
+      \begin{excode}
+        $\bm{p}=\{2,3,5,7,11,...\}$
+      \end{excode}
+        $\bm{p}=\{2,3,5,7,11,...\}$
+    \end{tcolorbox}
+    \begin{tcolorbox}[title=\textbackslash ldotsを使用する, colframe=correctcolor]
+      \begin{excode}
+        $\bm{p}=\{2,3,5,7,11,\ldots\}$
+      \end{excode}
+        $\bm{p}=\{2,3,5,7,11,\ldots\}$
+    \end{tcolorbox}
+\end{tcolorbox}
 
+\newcommand{\rsqbracket}{]}
+\subsection{非推奨な数式環境の使用}
+\TeX 及び \LaTeX には数式環境が複数存在しています．
+現在，様々な数学の表現を簡単に\LaTeX で記述するためにamsmathパッケージというものが
+デフォルトで用意されています．非推奨とされる数式環境はこのamsmathパッケージに対応していない
+環境です．
+\begin{tcolorbox}[title=ディスプレイ数式モードの数式環境]
+  最も，使ってはいけない環境です．amsmathどころか，\LaTeX にも対応していません．
+  \TeX 向けのコマンドとして定義されており，動作が保証されていません．
+  \begin{tcolorbox}[title=\$\$\ldots\$\$,colframe=wrongcolor]
+    この形の応力場を用いると、速度場のラグランジュ微分が
+    $$
+    -\grad p + \mu\Delta \bm{v} + (\lambda + \mu)\grad\Theta +
+    \Theta\grad(\lambda + \mu) + \grad(\bm{v} \cdots \grad\mu) +
+    \rot(\bm{v} \times \grad\mu) - \bm{v}\Delta\mu + \rho\bm{g}
+    $$
+    で与えられる．この方程式が\textbf{ナビエ-ストークス方程式}である．
+  \end{tcolorbox}
+  displaymath環境は非推奨な環境の一つです．amsmathパッケージ用に再定義されていないので使うべきではありません．
+  \begin{tcolorbox}[title=displaymath環境,colframe=wrongcolor]
+    この形の応力場を用いると、速度場のラグランジュ微分が
+    \begin{displaymath}
+      -\grad p + \mu\Delta \bm{v} + (\lambda + \mu)\grad\Theta +
+      \Theta\grad(\lambda + \mu) + \grad(\bm{v} \cdots \grad\mu) +
+      \rot(\bm{v} \times \grad\mu) - \bm{v}\Delta\mu + \rho\bm{g}
+    \end{displaymath}
+    で与えられる．この方程式が\textbf{ナビエ-ストークス方程式}である．
+  \end{tcolorbox}
+  equation環境はamsmathパッケージ用に定義された環境なのでこれを使いましょう．
+  \begin{tcolorbox}[title=equation環境,colframe=correctcolor]
+    この形の応力場を用いると、速度場のラグランジュ微分が
+    \begin{equation}
+      -\grad p + \mu\Delta \bm{v} + (\lambda + \mu)\grad\Theta +
+      \Theta\grad(\lambda + \mu) + \grad(\bm{v} \cdots \grad\mu) +
+      \rot(\bm{v} \times \grad\mu) - \bm{v}\Delta\mu + \rho\bm{g}
+    \end{equation}
+    で与えられる．この方程式が\textbf{ナビエ-ストークス方程式}である．
+  \end{tcolorbox}
+    \textbackslash[\ldots\textbackslash\rsqbracket はamsmathパッケージ用に再定義されているので
+    安全に使うことができます．
+    \begin{tcolorbox}[title=\textbackslash[\ldots\textbackslash\rsqbracket,colframe=correctcolor]
+      この形の応力場を用いると、速度場のラグランジュ微分が
+    \[
+    -\grad p + \mu\Delta \bm{v} + (\lambda + \mu)\grad\Theta +
+    \Theta\grad(\lambda + \mu) + \grad(\bm{v} \cdots \grad\mu) +
+    \rot(\bm{v} \times \grad\mu) - \bm{v}\Delta\mu + \rho\bm{g}
+    \]
+    で与えられる．この方程式が\textbf{ナビエ-ストークス方程式}である．
+  \end{tcolorbox}
+\end{tcolorbox}
+
+\begin{tcolorbox}[title=複数行に亘る数式環境]
+  ディスプレイ数式モードには途中式などを含む複数行に亘る数式を書くための環境があります．
+  古い書き方だと，eqnarray環境
+  \footnote{情報リテラシー演習の手引書や教科書にもこの環境が紹介されているので注意すること}
+  を使いますが，現在は非推奨となっており，代わりにalign環境を
+  使うことが推奨されています．eqnarray環境は数式が長くなる時，
+  数式番号が数式と重なってしまうという問題点や数式同士の行を合わせる為に
+  余白が一定でなくなるという問題点があります．
+  \begin{tcolorbox}[title=eqnarray環境, colframe=wrongcolor]
+    \small
+    \begin{eqnarray}
+      &\rho\frac{D\bm{v}}{Dt}& =  \\
+      &-\grad p& + \mu\Delta \bm{v} + (\lambda + \mu)\grad\Theta +
+      \Theta\grad(\lambda + \mu) + \grad(\bm{v} \cdots \grad\mu) +
+      \rot(\bm{v} \times \grad\mu) - \bm{v}\Delta\mu + \rho\bm{g}
+    \end{eqnarray}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=align環境, colframe=correctcolor]
+    \small
+    \begin{align}
+      &\rho\frac{D\bm{v}}{Dt} = \\
+      &-\grad p + \mu\Delta \bm{v} + (\lambda + \mu)\grad\Theta +
+      \Theta\grad(\lambda + \mu) + \grad(\bm{v} \cdots \grad\mu) +
+      \rot(\bm{v} \times \grad\mu) - \bm{v}\Delta\mu + \rho\bm{g}
+    \end{align}
+  \end{tcolorbox}
+\end{tcolorbox}
+\subsection{itemize環境の誤用}
+箇条書きができる環境として，itemize環境があります．
+ある演習のレポートでは\textbf{itemize環境の中で\textbackslash itemコマンドを使って
+その中に文章を書く}という誤用をしている人が一定数いました．
+itemize環境は箇条書きをするための環境なので箇条書き以外には使うべきではありません．
+\begin{tcolorbox}[title=itemize環境の誤用例]
+  \begin{tcolorbox}[title=itemize環境の誤用, colframe=wrongcolor]
+    \begin{excode}
+      \begin{itemize}
+        \item このようにitemize環境内で\textbackslash itemコマンドを使えば．
+        文章の最初に丸がつくが，これは箇条書き用の環境なので使うべきではない．
+      \end{itemize}
+    \end{excode}
+    \begin{itemize}
+      \item このようにitemize環境内で\textbackslash itemコマンドを使えば．
+      文章の最初に丸がつくが，これは箇条書き用の環境なので使うべきではない．
+    \end{itemize}
+  \end{tcolorbox}
+  \begin{tcolorbox}[title=itemize環境の正しい使い方, colframe=correctcolor]
+    \begin{excode}
+      \begin{itemize}
+        \item 箇条書きその1
+        \item 箇条書きその2
+        \item 箇条書きその3
+      \end{itemize}
+    \end{excode}
+    \begin{itemize}
+      \item 箇条書きその1
+      \item 箇条書きその2
+      \item 箇条書きその3
+    \end{itemize}
+  \end{tcolorbox}
+\end{tcolorbox}
 \section{さいごに}
-ここで紹介したのは，これから卒業まで書いているレポートや論文の中でよくある間違いをピックアップしたに過ぎません．
-他にも，誤用されたまま紹介されている\LaTeX のコマンドや古い書き方が紹介されていることもあります．
-それら誤用と正しい使い方を紹介したサイト\footnote{\url{http://ichiro-maruta.blogspot.jp/2013/03/latex.html}}がありますので是非参考にしてください．
+今回，ここで紹介したのはレポートなどでよく使うコマンドなどに絞って紹介しました．
+他にも，誤用されたまま紹介されている\LaTeX のコマンドや古い書き方が紹介されているサイトや教科書が多くあります．
+それらの誤用と正しい使い方を紹介したサイト\footnote{\url{http://ichiro-maruta.blogspot.jp/2013/03/latex.html}}がありますので是非参考にしてください．
 \end{document}

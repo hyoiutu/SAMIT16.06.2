@@ -1,0 +1,106 @@
+\documentclass[a4j,uplatex,dvipdfmx]{beamer}
+\usepackage{minted}
+\usepackage{spverbatim}
+\usetheme{SAMIT}
+\title{gnuplot-lua-tikzの使い方}
+\author{FujiwaLaTeX}
+\institute{室蘭工業大学工学研究科 情報電子工学系専攻}
+\begin{document}
+\maketitle
+\begin{frame}{gnuplot-lua-tikzとは}
+  gnuplotで描画したグラフを \\ texファイルに埋め込む為のパッケージ
+\end{frame}
+\begin{frame}{texファイルにグラフを埋め込む手順}
+  \begin{itemize}
+    \item gnuplotでグラフを描画する
+    \item gnuplot-lua-tikz.styを生成する
+    \item gnuplotで描画したグラフをtexファイルにする
+    \item texファイル化したグラフを編集する
+    \item 生成したtexファイルを埋め込む
+  \end{itemize}
+\end{frame}
+\begin{frame}{texファイルにグラフを埋め込む手順}
+  \begin{itemize}
+    \item \alert{gnuplotでグラフを描画する}
+    \item gnuplot-lua-tikz.styを生成する
+    \item gnuplotで描画したグラフをtexファイルにする
+    \item texファイル化したグラフを編集する
+    \item 生成したtexファイルを埋め込む
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]{gnuplotでグラフを描画する}
+  \begin{minted}{shell}
+    gnuplot
+  \end{minted}
+  \begin{minted}{gnuplot}
+    set xlabel "x"
+    set ylabel "f(x)"
+    plot sin(x)
+  \end{minted}
+\end{frame}
+\begin{frame}{texファイルにグラフを埋め込む手順}
+  \begin{itemize}
+    \item gnuplotでグラフを描画する
+    \item \alert{gnuplot-lua-tikz.styを生成する}
+    \item gnuplotで描画したグラフをtexファイルにする
+    \item texファイル化したグラフを編集する
+    \item 生成したtexファイルを埋め込む
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]{gnuplot-lua-tikz.styを生成する}
+  \begin{minted}{gnuplot}
+    set term tikz createstyle
+  \end{minted}
+\end{frame}
+\begin{frame}{texファイルにグラフを埋め込む手順}
+  \begin{itemize}
+    \item gnuplotでグラフを描画する
+    \item gnuplot-lua-tikz.styを生成する
+    \item \alert{gnuplotで描画したグラフをtexファイルにする}
+    \item texファイル化したグラフを編集する
+    \item 生成したtexファイルを埋め込む
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]{gnuplotで描画したグラフをtexファイルにする}
+  \begin{minted}{gnuplot}
+    # set term tikz createstyleをしていれば不要
+    set term tikz
+    set output "graph.tex"
+    replot
+  \end{minted}
+\end{frame}
+\begin{frame}{texファイルにグラフを埋め込む手順}
+  \begin{itemize}
+    \item gnuplotでグラフを描画する
+    \item gnuplot-lua-tikz.styを生成する
+    \item gnuplotで描画したグラフをtexファイルにする
+    \item \alert{texファイル化したグラフを編集する}
+    \item 生成したtexファイルを埋め込む
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]{texファイル化したグラフを編集する}
+  \begin{minted}[fontsize=\small]{tex}
+  \node[gp node center,rotate=-270] at (0.246,4.683) {$f(x)$};
+  \node[gp node center] at (6.725,0.215) {$x$};
+  \node[gp node right] at (10.479,8.047) {$sin(x)$};
+  \end{minted}
+\end{frame}
+\begin{frame}{texファイルにグラフを埋め込む手順}
+  \begin{itemize}
+    \item gnuplotでグラフを描画する
+    \item gnuplot-lua-tikz.styを生成する
+    \item gnuplotで描画したグラフをtexファイルにする
+    \item texファイル化したグラフを編集する
+    \item \alert{生成したtexファイルを埋め込む}
+  \end{itemize}
+\end{frame}
+\begin{frame}[fragile]{生成したtexファイルを埋め込む}
+  \begin{minted}{tex}
+    \documentclass[uplatex,dvipdfmx]{jsarticle}
+    \usepackage{gnuplo-lua-tikz}
+    \begin{document}
+    \input{graph}
+    \end{document}
+  \end{minted}
+\end{frame}
+\end{document}
